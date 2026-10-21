@@ -1,0 +1,72 @@
+<!--@subject [Private feedback] Order #__ORDER_INCREMENT_ID__ — __FIRSTNAME__ @-->
+<!--@vars {
+"__FIRSTNAME__":"Customer first name",
+"__CUSTOMER_EMAIL__":"Customer email address",
+"__ORDER_INCREMENT_ID__":"Order number",
+"__RATING_HTML__":"Star rating HTML (pre-rendered by PHP)",
+"__FEEDBACK_HTML__":"Feedback text (HTML-escaped, with nl2br)",
+"__ADMIN_URL__":"Deep link to the feedback detail page in admin"
+} @-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Private feedback received</title></head>
+<body style="margin:0; padding:0; background-color:#f4f4f4; font-family:Arial,Helvetica,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f4f4f4; padding:24px 0;">
+    <tr><td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; background-color:#ffffff; border-radius:6px; overflow:hidden;">
+            <tr>
+                <td style="background-color:#1a1a1a; padding:20px 24px; color:#ffffff;">
+                    <div style="font-family:Arial,Helvetica,sans-serif; font-size:14px; letter-spacing:1px; color:#F58220; text-transform:uppercase;">Private feedback received</div>
+                    <div style="font-family:Arial,Helvetica,sans-serif; font-size:22px; font-weight:700; margin-top:4px;">Order #__ORDER_INCREMENT_ID__</div>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:24px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif; font-size:14px; color:#333333;">
+                        <tr>
+                            <td style="padding:6px 0; width:120px; color:#888888;">Customer:</td>
+                            <td style="padding:6px 0;"><strong>__FIRSTNAME__</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px 0; color:#888888;">Email:</td>
+                            <td style="padding:6px 0;"><a href="mailto:__CUSTOMER_EMAIL__" style="color:#F58220;">__CUSTOMER_EMAIL__</a></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px 0; color:#888888;">Order #:</td>
+                            <td style="padding:6px 0;">__ORDER_INCREMENT_ID__</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px 0; color:#888888;">Rating:</td>
+                            <td style="padding:6px 0; color:#F58220; font-size:18px; letter-spacing:2px;">__RATING_HTML__</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:0 24px 24px 24px;">
+                    <div style="font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#888888; margin-bottom:6px;">Feedback:</div>
+                    <div style="font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#333333; line-height:1.55; padding:16px; background-color:#f9f9f9; border-left:4px solid #F58220; border-radius:4px;">
+                        __FEEDBACK_HTML__
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:0 24px 16px 24px;" align="center">
+                    <a href="__ADMIN_URL__" style="display:inline-block; background-color:#F58220; color:#ffffff; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:700; text-decoration:none; padding:12px 28px; border-radius:4px;">
+                        View in Admin
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:0 24px 24px 24px;">
+                    <p style="font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#888888; margin:0;">
+                        The customer has been shown a confirmation screen. This feedback is stored in Marketing &rarr; Review Automation &rarr; Customer Feedback (admin).
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </td></tr>
+</table>
+</body>
+</html>

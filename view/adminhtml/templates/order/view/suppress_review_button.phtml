@@ -1,0 +1,70 @@
+<?php
+/**
+ * Order view — Suppress / Resume review emails toggle.
+ *
+ * @var \ReviewAutomation\Reviews\Block\Adminhtml\Order\View\SuppressReviewButton $block
+ */
+
+if (!$block->canRender()) {
+    return;
+}
+
+$email      = $block->getCustomerEmail();
+$suppressed = $block->isSuppressed();
+$row        = $block->getCurrentSuppression();
+
+$formKey      = $block->escapeHtmlAttr($block->getFormKey());
+$suppressUrl  = $block->escapeUrl($block->getSuppressUrl());
+$resumeUrl    = $block->escapeUrl($block->getResumeUrl());
+?>
+<div class="reviewautomation-review-suppression" style="margin:16px 0; padding:14px 16px; border:1px solid #e0e0e0; border-radius:4px; background:#fafafa;">
+    <h4 style="margin:0 0 8px 0; font-size:13px; text-transform:uppercase; letter-spacing:0.5px; color:#666;">
+        Review Email Suppression
+    </h4>
+
+    <p style="margin:0 0 10px 0; font-size:13px; color:#333;">
+        Customer email: <strong><?= $block->escapeHtml($email) ?></strong>
+    </p>
+
+    <?php if ($suppressed && $row !== null): ?>
+        <p style="margin:0 0 6px 0; font-size:12px; color:#a05500;">
+            <strong>Currently suppressed.</strong>
+        </p>
+        <ul style="margin:0 0 12px 0; padding-left:18px; font-size:12px; color:#555; line-height:1.5;">
+            <li>Source: <?= $block->escapeHtml($block->getSourceLabel((string) $row->getData('source'))) ?></li>
+            <?php if ($row->getData('reason')): ?>
+                <li>Reason: <?= $block->escapeHtml((string) $row->getData('reason')) ?></li>
+            <?php endif; ?>
+            <li>Suppressed at: <?= $block->escapeHtml((string) $row->getData('created_at')) ?> UTC</li>
+            <li>Created by: <?= $block->escapeHtml($block->getAdminUsername((int) $row->getData('created_by_admin_user_id') ?: null)) ?></li>
+        </ul>
+
+        <form action="<?= /* @noEscape */ $resumeUrl ?>" method="post"
+              onsubmit="return confirm('Resume review emails for this customer? Past queue rows already marked as unsubscribed will not be re-sent — only future orders are affected.');"
+              style="display:inline-block;">
+            <input type="hidden" name="form_key" value="<?= /* @noEscape */ $formKey ?>" />
+            <button type="submit"
+                    style="background-color:#3a7d44; color:#ffffff; border:none; border-radius:3px; padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer;">
+                Resume review emails for this customer
+            </button>
+        </form>
+    <?php else: ?>
+        <p style="margin:0 0 12px 0; font-size:12px; color:#555;">
+            Not currently suppressed. Suppressing will add this customer's email to the global review-email
+            opt-out list. They will not receive review request emails for any current or future orders, until
+            you (or another admin) explicitly resume.
+        </p>
+
+        <form action="<?= /* @noEscape */ $suppressUrl ?>" method="post"
+              id="reviewautomation-review-suppress-form"
+              style="display:inline-block;">
+            <input type="hidden" name="form_key" value="<?= /* @noEscape */ $formKey ?>" />
+            <input type="hidden" name="reason" id="reviewautomation-review-suppress-reason" value="" />
+            <button type="button"
+                    onclick="(function(){var r=prompt('Optional: reason for suppression (max 255 chars). Leave blank to skip.', '');if(r===null){return;}document.getElementById('reviewautomation-review-suppress-reason').value=r.substring(0,255);document.getElementById('reviewautomation-review-suppress-form').submit();})()"
+                    style="background-color:#F58220; color:#ffffff; border:none; border-radius:3px; padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer;">
+                Suppress review emails for this customer
+            </button>
+        </form>
+    <?php endif; ?>
+</div>

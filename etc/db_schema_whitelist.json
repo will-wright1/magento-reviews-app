@@ -1,0 +1,99 @@
+{
+    "reviewautomation_review_queue": {
+        "column": {
+            "queue_id": true,
+            "order_id": true,
+            "order_increment_id": true,
+            "customer_email": true,
+            "customer_firstname": true,
+            "store_id": true,
+            "token": true,
+            "status": true,
+            "sentiment": true,
+            "email1_sent_at": true,
+            "email1_reminder_sent_at": true,
+            "email2_sent_at": true,
+            "email2_nudge_sent_at": true,
+            "product_review_sent_at": true,
+            "clicked_at": true,
+            "platform_clicked": true,
+            "platform_click_at": true,
+            "source": true,
+            "age_exempt": true,
+            "booster_batch_id": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "REVIEWAUTOMATION_REVIEW_QUEUE_STATUS": true,
+            "REVIEWAUTOMATION_REVIEW_QUEUE_CUSTOMER_EMAIL": true,
+            "REVIEWAUTOMATION_REVIEW_QUEUE_BOOSTER_BATCH_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REVIEWAUTOMATION_REVIEW_QUEUE_TOKEN": true,
+            "REVIEWAUTOMATION_REVIEW_QUEUE_ORDER_UNIQUE": true
+        }
+    },
+    "reviewautomation_review_booster_batch": {
+        "column": {
+            "batch_id": true,
+            "status": true,
+            "date_from": true,
+            "date_to": true,
+            "min_order_value": true,
+            "per_day": true,
+            "total_queued": true,
+            "created_by": true,
+            "last_run_at": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "REVIEWAUTOMATION_REVIEW_BOOSTER_BATCH_STATUS": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "reviewautomation_review_feedback": {
+        "column": {
+            "feedback_id": true,
+            "queue_id": true,
+            "order_id": true,
+            "order_increment_id": true,
+            "customer_email": true,
+            "customer_firstname": true,
+            "feedback_text": true,
+            "rating": true,
+            "is_resolved": true,
+            "admin_notes": true,
+            "created_at": true
+        },
+        "index": {
+            "REVIEWAUTOMATION_REVIEW_FEEDBACK_IS_RESOLVED": true,
+            "REVIEWAUTOMATION_REVIEW_FEEDBACK_CREATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REVIEWAUTOMATION_REVIEW_FEEDBACK_QUEUE_UNIQUE": true
+        }
+    },
+    "reviewautomation_review_unsubscribe": {
+        "column": {
+            "unsubscribe_id": true,
+            "customer_email": true,
+            "created_at": true,
+            "reason": true,
+            "source": true,
+            "created_by_admin_user_id": true
+        },
+        "index": {
+            "REVIEWAUTOMATION_REVIEW_UNSUB_SOURCE_IDX": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "REVIEWAUTOMATION_REVIEW_UNSUB_EMAIL_UNIQUE": true
+        }
+    }
+}

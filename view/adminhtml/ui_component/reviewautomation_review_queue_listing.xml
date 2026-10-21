@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">reviewautomation_review_queue_listing.reviewautomation_review_queue_listing_data_source</item>
+        </item>
+    </argument>
+
+    <settings>
+        <spinner>reviewautomation_review_queue_columns</spinner>
+        <deps>
+            <dep>reviewautomation_review_queue_listing.reviewautomation_review_queue_listing_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="reviewautomation_review_queue_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">queue_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>ReviewAutomation_Reviews::queue</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="reviewautomation_review_queue_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>queue_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <filterSelect name="status" provider="${ $.parentName }">
+                <settings>
+                    <options class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\StatusOptions"/>
+                    <caption translate="true">All Statuses</caption>
+                    <label translate="true">Status</label>
+                    <dataScope>status</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="sentiment" provider="${ $.parentName }">
+                <settings>
+                    <options class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\SentimentOptions"/>
+                    <caption translate="true">All</caption>
+                    <label translate="true">Sentiment</label>
+                    <dataScope>sentiment</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+        <paging name="listing_paging"/>
+        <exportButton name="export_button"/>
+    </listingToolbar>
+
+    <columns name="reviewautomation_review_queue_columns">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>queue_id</indexField>
+            </settings>
+        </selectionsColumn>
+
+        <column name="queue_id" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+
+        <column name="order_increment_id"
+                class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\OrderLink"
+                sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Order #</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+            </settings>
+        </column>
+
+        <column name="customer_firstname" sortOrder="30">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Customer Name</label>
+            </settings>
+        </column>
+
+        <column name="customer_email" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Customer Email</label>
+            </settings>
+        </column>
+
+        <column name="status" class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\Status"
+                component="Magento_Ui/js/grid/columns/column" sortOrder="50">
+            <settings>
+                <filter>select</filter>
+                <label translate="true">Status</label>
+                <dataType>select</dataType>
+                <options class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\StatusOptions"/>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+            </settings>
+        </column>
+
+        <column name="sentiment" component="Magento_Ui/js/grid/columns/select" sortOrder="60">
+            <settings>
+                <filter>select</filter>
+                <label translate="true">Sentiment</label>
+                <dataType>select</dataType>
+                <options class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\SentimentOptions"/>
+            </settings>
+        </column>
+
+        <column name="email1_sent_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="70">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Email 1 Sent</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+
+        <column name="email1_reminder_sent_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="75">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Email 1 Reminder Sent</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+
+        <column name="email2_sent_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="80">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Email 2 Sent</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+
+        <column name="email2_nudge_sent_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="82">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Nudge Sent</label>
+                <dataType>date</dataType>
+                <visible>false</visible>
+            </settings>
+        </column>
+
+        <column name="product_review_sent_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="85">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Product Review Sent</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+
+        <column name="clicked_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="90">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Clicked At</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+
+        <column name="source" sortOrder="91">
+            <settings>
+                <filter>select</filter>
+                <options class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\SourceOptions"/>
+                <dataType>select</dataType>
+                <label translate="true">Source</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+
+        <column name="platform_clicked" sortOrder="92">
+            <settings>
+                <filter>select</filter>
+                <options class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\PlatformOptions"/>
+                <dataType>select</dataType>
+                <label translate="true">Platform Clicked</label>
+            </settings>
+        </column>
+
+        <column name="platform_click_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="94">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Platform Click At</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="100">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Created At</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+
+        <actionsColumn name="actions"
+                       class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\QueueActions"
+                       sortOrder="200">
+            <settings>
+                <indexField>queue_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

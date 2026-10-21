@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="reviewautomation_review_queue_populate"
+             instance="ReviewAutomation\Reviews\Cron\PopulateQueue"
+             method="execute">
+            <schedule>*/30 * * * *</schedule>
+        </job>
+        <job name="reviewautomation_review_email_send"
+             instance="ReviewAutomation\Reviews\Cron\SendEmails"
+             method="execute">
+            <schedule>*/15 * * * *</schedule>
+        </job>
+        <job name="reviewautomation_review_booster_feed"
+             instance="ReviewAutomation\Reviews\Cron\FeedBoosterBatches"
+             method="execute">
+            <schedule>20 * * * *</schedule>
+        </job>
+    </group>
+</config>

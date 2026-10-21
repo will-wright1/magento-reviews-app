@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+    Adds a "Suppress review emails" mass action to Magento's standard sales
+    order grid. ACL-gated by ReviewAutomation_Reviews::unsubscribe — admins
+    without that permission don't see the action.
+
+    The bulk action applies to each unique selected customer email.
+    Reasons are recorded via Pattern B (order view button) or Pattern C
+    (manual grid entry). Mass action is for "I just need these gone, fast".
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <listingToolbar name="listing_top">
+        <massaction name="listing_massaction">
+            <action name="reviewautomation_suppress_review_emails">
+                <settings>
+                    <confirm>
+                        <message translate="true">This will add the email addresses of the selected orders' customers to the review email suppression list. They will not receive review request emails for any current or future orders. Continue?</message>
+                        <title translate="true">Suppress Review Emails</title>
+                    </confirm>
+                    <url path="reviewautomation_reviewautomation/order_unsubscribe/massSuppress"/>
+                    <type>reviewautomation_suppress_review_emails</type>
+                    <label translate="true">Add customer email to review suppression list</label>
+                </settings>
+            </action>
+        </massaction>
+    </listingToolbar>
+</listing>

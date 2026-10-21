@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="order_info">
+            <block class="ReviewAutomation\Reviews\Block\Adminhtml\Order\View\SuppressReviewButton"
+                   name="reviewautomation.review.suppress.button"
+                   template="ReviewAutomation_Reviews::order/view/suppress_review_button.phtml"
+                   after="-"/>
+        </referenceContainer>
+    </body>
+</page>

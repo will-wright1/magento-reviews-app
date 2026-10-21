@@ -1,0 +1,80 @@
+<?php
+/**
+ * Dashboard stats cards above the Review Queue grid.
+ *
+ * @var \ReviewAutomation\Reviews\Block\Adminhtml\Queue\Stats $block
+ */
+$email1Sent    = $block->getEmail1Sent();
+$happyCount    = $block->getClickedHappy();
+$unhappyCount  = $block->getClickedUnhappy();
+$noResponse    = $block->getNoResponse();
+$reminderSent  = $block->getEmail1ReminderSent();
+$email2Sent    = $block->getEmail2Sent();
+$productReviewSent = $block->getProductReviewSent();
+$feedbackCount = $block->getFeedbackCount();
+$platformClicks = $block->getPlatformClicks();
+$platformClickRate = $block->getPlatformClickRate();
+$happyRate     = $block->getHappyRate();
+$unhappyRate   = $block->getUnhappyRate();
+$noResponseRate = $block->getNoResponseRate();
+?>
+<style>
+    .reviewautomation-stats { display:flex; flex-wrap:wrap; gap:12px; margin:0 0 20px; }
+    .reviewautomation-stat-card {
+        flex:1 1 140px; min-width:140px; max-width:200px;
+        background:#fff; border:1px solid #e0e0e0; border-radius:6px;
+        padding:16px 18px; text-align:center;
+    }
+    .reviewautomation-stat-card .stat-value {
+        font-size:28px; font-weight:700; line-height:1.2; margin-bottom:4px;
+    }
+    .reviewautomation-stat-card .stat-label {
+        font-size:12px; color:#888; text-transform:uppercase; letter-spacing:0.5px;
+    }
+    .reviewautomation-stat-card .stat-sub {
+        font-size:11px; color:#aaa; margin-top:2px;
+    }
+</style>
+
+<div class="reviewautomation-stats">
+    <div class="reviewautomation-stat-card">
+        <div class="stat-value" style="color:#2196F3;"><?= (int) $email1Sent ?></div>
+        <div class="stat-label"><?= $block->escapeHtml(__('Email 1 Sent')) ?></div>
+    </div>
+    <div class="reviewautomation-stat-card">
+        <div class="stat-value" style="color:#009688;"><?= (int) $reminderSent ?></div>
+        <div class="stat-label"><?= $block->escapeHtml(__('Reminder Sent')) ?></div>
+    </div>
+    <div class="reviewautomation-stat-card">
+        <div class="stat-value" style="color:#4CAF50;"><?= (int) $happyCount ?></div>
+        <div class="stat-label"><?= $block->escapeHtml(__('Happy Clicks')) ?></div>
+        <div class="stat-sub"><?= number_format($happyRate, 1) ?>%</div>
+    </div>
+    <div class="reviewautomation-stat-card">
+        <div class="stat-value" style="color:#f44336;"><?= (int) $unhappyCount ?></div>
+        <div class="stat-label"><?= $block->escapeHtml(__('Unhappy Clicks')) ?></div>
+        <div class="stat-sub"><?= number_format($unhappyRate, 1) ?>%</div>
+    </div>
+    <div class="reviewautomation-stat-card">
+        <div class="stat-value" style="color:#9e9e9e;"><?= (int) $noResponse ?></div>
+        <div class="stat-label"><?= $block->escapeHtml(__('No Response')) ?></div>
+        <div class="stat-sub"><?= number_format($noResponseRate, 1) ?>%</div>
+    </div>
+    <div class="reviewautomation-stat-card">
+        <div class="stat-value" style="color:#9C27B0;"><?= (int) $email2Sent ?></div>
+        <div class="stat-label"><?= $block->escapeHtml(__('Email 2 Sent')) ?></div>
+    </div>
+    <div class="reviewautomation-stat-card">
+        <div class="stat-value" style="color:#00695C;"><?= (int) $platformClicks ?></div>
+        <div class="stat-label"><?= $block->escapeHtml(__('Platform Clicks')) ?></div>
+        <div class="stat-sub"><?= number_format($platformClickRate, 1) ?>% <?= $block->escapeHtml(__('of happy')) ?></div>
+    </div>
+    <div class="reviewautomation-stat-card">
+        <div class="stat-value" style="color:#E65100;"><?= (int) $productReviewSent ?></div>
+        <div class="stat-label"><?= $block->escapeHtml(__('Product Requests')) ?></div>
+    </div>
+    <div class="reviewautomation-stat-card">
+        <div class="stat-value" style="color:#F58220;"><?= (int) $feedbackCount ?></div>
+        <div class="stat-label"><?= $block->escapeHtml(__('Feedbacks')) ?></div>
+    </div>
+</div>

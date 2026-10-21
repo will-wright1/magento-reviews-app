@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">reviewautomation_review_unsubscribe_listing.reviewautomation_review_unsubscribe_listing_data_source</item>
+        </item>
+    </argument>
+
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/*/new"/>
+                <class>primary</class>
+                <label translate="true">Add Suppression Entry</label>
+            </button>
+        </buttons>
+        <spinner>reviewautomation_review_unsubscribe_columns</spinner>
+        <deps>
+            <dep>reviewautomation_review_unsubscribe_listing.reviewautomation_review_unsubscribe_listing_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="reviewautomation_review_unsubscribe_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">unsubscribe_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>ReviewAutomation_Reviews::unsubscribe</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="reviewautomation_review_unsubscribe_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>unsubscribe_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <filterSelect name="source" provider="${ $.parentName }">
+                <settings>
+                    <options class="ReviewAutomation\Reviews\Model\Config\Source\UnsubscribeSource"/>
+                    <caption translate="true">All</caption>
+                    <label translate="true">Source</label>
+                    <dataScope>source</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+        <paging name="listing_paging"/>
+        <massaction name="listing_massaction">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Delete the selected suppression entries? Customers' email addresses will be eligible to receive review request emails again for any FUTURE orders. Past queue rows already marked as unsubscribed are not affected.</message>
+                        <title translate="true">Delete Suppression Entries</title>
+                    </confirm>
+                    <url path="reviewautomation_reviewautomation/unsubscribe/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+        </massaction>
+    </listingToolbar>
+
+    <columns name="reviewautomation_review_unsubscribe_columns">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>unsubscribe_id</indexField>
+            </settings>
+        </selectionsColumn>
+
+        <column name="unsubscribe_id" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+
+        <column name="customer_email" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Email Address</label>
+            </settings>
+        </column>
+
+        <column name="source" component="Magento_Ui/js/grid/columns/select" sortOrder="30">
+            <settings>
+                <filter>select</filter>
+                <label translate="true">Source</label>
+                <dataType>select</dataType>
+                <options class="ReviewAutomation\Reviews\Model\Config\Source\UnsubscribeSource"/>
+            </settings>
+        </column>
+
+        <column name="reason" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Reason</label>
+            </settings>
+        </column>
+
+        <column name="created_by_admin_user_id"
+                class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\AdminUserName"
+                sortOrder="50">
+            <settings>
+                <label translate="true">Created By</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="60">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Suppressed At</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+
+        <actionsColumn name="actions" class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\UnsubscribeActions"
+                       sortOrder="200">
+            <settings>
+                <indexField>unsubscribe_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

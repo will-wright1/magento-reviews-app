@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="reviewautomation_review_satisfaction_check"
+              label="Review Automation — Review Satisfaction Check (Email 1)"
+              file="satisfaction_check.html"
+              type="html"
+              module="ReviewAutomation_Reviews"
+              area="frontend"/>
+    <template id="reviewautomation_review_satisfaction_reminder"
+              label="Review Automation — Review Satisfaction Reminder"
+              file="satisfaction_reminder.html"
+              type="html"
+              module="ReviewAutomation_Reviews"
+              area="frontend"/>
+    <template id="reviewautomation_review_request"
+              label="Review Automation — Company Review Request (Email 2)"
+              file="review_request.html"
+              type="html"
+              module="ReviewAutomation_Reviews"
+              area="frontend"/>
+    <template id="reviewautomation_review_request_nudge"
+              label="Review Automation — Company Review Request Nudge (Email 2 follow-up)"
+              file="review_request_nudge.html"
+              type="html"
+              module="ReviewAutomation_Reviews"
+              area="frontend"/>
+    <template id="reviewautomation_product_review_request"
+              label="Review Automation — Product Review Request (Email 3)"
+              file="product_review_request.html"
+              type="html"
+              module="ReviewAutomation_Reviews"
+              area="frontend"/>
+    <template id="reviewautomation_review_admin_feedback_notification"
+              label="Review Automation — Admin Feedback Notification"
+              file="admin_feedback_notification.html"
+              type="html"
+              module="ReviewAutomation_Reviews"
+              area="frontend"/>
+
+    <!--
+        Passthrough template — used internally by MessageBuilder so the
+        TransportBuilder integrates with the configured Magento mail transport.
+        The body is pre-rendered HTML; |raw prevents Magento's filter from
+        escaping it. Not intended for admin editing.
+    -->
+    <template id="reviewautomation_review_automation_passthrough"
+              label="Review Automation — Review Automation (passthrough, internal)"
+              file="passthrough.html"
+              type="html"
+              module="ReviewAutomation_Reviews"
+              area="frontend"/>
+</config>

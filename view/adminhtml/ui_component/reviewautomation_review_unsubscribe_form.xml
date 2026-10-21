@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">reviewautomation_review_unsubscribe_form.reviewautomation_review_unsubscribe_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Suppression Entry</item>
+        <item name="config" xsi:type="array">
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">reviewautomation_review_unsubscribe_form</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">ReviewAutomation\Reviews\Block\Adminhtml\Unsubscribe\Edit\BackButton</item>
+            <item name="delete" xsi:type="string">ReviewAutomation\Reviews\Block\Adminhtml\Unsubscribe\Edit\DeleteButton</item>
+            <item name="save" xsi:type="string">ReviewAutomation\Reviews\Block\Adminhtml\Unsubscribe\Edit\SaveButton</item>
+        </item>
+    </argument>
+
+    <settings>
+        <deps>
+            <dep>reviewautomation_review_unsubscribe_form.reviewautomation_review_unsubscribe_form_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="reviewautomation_review_unsubscribe_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="reviewautomation_reviewautomation/unsubscribe/save"/>
+        </settings>
+        <dataProvider class="ReviewAutomation\Reviews\Model\Unsubscribe\DataProvider"
+                      name="reviewautomation_review_unsubscribe_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>unsubscribe_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <fieldset name="general">
+        <settings>
+            <label translate="true">Suppression Entry</label>
+        </settings>
+
+        <field name="unsubscribe_id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reviewautomation_review_unsubscribe</item>
+                </item>
+            </argument>
+            <settings>
+                <visible>false</visible>
+                <dataType>text</dataType>
+                <dataScope>unsubscribe_id</dataScope>
+            </settings>
+        </field>
+
+        <field name="customer_email" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reviewautomation_review_unsubscribe</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Customer Email</label>
+                <dataType>text</dataType>
+                <dataScope>customer_email</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-email" xsi:type="boolean">true</rule>
+                </validation>
+                <notice translate="true">Read-only on edit. To change the email, delete this entry and add a new one.</notice>
+            </settings>
+        </field>
+
+        <field name="reason" formElement="textarea">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reviewautomation_review_unsubscribe</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Reason</label>
+                <dataType>text</dataType>
+                <dataScope>reason</dataScope>
+                <validation>
+                    <rule name="max_text_length" xsi:type="number">255</rule>
+                </validation>
+                <notice translate="true">Optional. Up to 255 characters.</notice>
+            </settings>
+        </field>
+
+        <field name="source" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reviewautomation_review_unsubscribe</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Source</label>
+                <dataType>text</dataType>
+                <dataScope>source</dataScope>
+                <disabled>true</disabled>
+                <notice translate="true">Set automatically based on how this entry was created.</notice>
+            </settings>
+        </field>
+
+        <field name="created_by_admin_user_label" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reviewautomation_review_unsubscribe</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Created By</label>
+                <dataType>text</dataType>
+                <dataScope>created_by_admin_user_label</dataScope>
+                <disabled>true</disabled>
+            </settings>
+        </field>
+
+        <field name="created_at" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">reviewautomation_review_unsubscribe</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Suppressed At</label>
+                <dataType>text</dataType>
+                <dataScope>created_at</dataScope>
+                <disabled>true</disabled>
+            </settings>
+        </field>
+    </fieldset>
+</form>

@@ -1,0 +1,111 @@
+<?php
+/**
+ * Private feedback form — unhappy path.
+ *
+ * @var \ReviewAutomation\Reviews\Block\FeedbackForm $block
+ */
+$firstname   = $block->escapeHtml($block->getCustomerFirstname());
+$incrementId = $block->escapeHtml($block->getOrderIncrementId());
+$formAction  = $block->escapeUrl($block->getFormAction());
+$formToken   = $block->escapeHtmlAttr($block->getTimestampToken());
+$token       = $block->escapeHtmlAttr($block->getToken());
+?>
+<?php if ($block->getData('branding')->getLogoUrl()): ?>
+    <p style="text-align:center"><img style="max-width:220px;max-height:80px" src="<?= $block->escapeUrl($block->getData('branding')->getLogoUrl()) ?>" alt="<?= $block->escapeHtmlAttr($block->getData('branding')->getName()) ?>"></p>
+<?php endif; ?>
+<div class="reviewautomation-review-feedback" style="max-width:640px; margin:40px auto; font-family:Arial,Helvetica,sans-serif;">
+    <div style="background-color:#1a1a1a; padding:32px; border-radius:6px 6px 0 0; text-align:center;">
+        <div style="font-size:28px; font-weight:700; letter-spacing:2px; color:#ffffff;"><?= $block->escapeHtml($block->getData('branding')->getName()) ?></div>
+        <div style="width:60px; height:3px; background-color:<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>; margin:10px auto 0;"></div>
+    </div>
+
+    <div style="background-color:#ffffff; padding:40px 32px 32px; border:1px solid #e0e0e0; border-top:none; border-radius:0 0 6px 6px;">
+        <h1 style="font-size:24px; color:#1a1a1a; margin:0 0 16px;">We're sorry to hear that.</h1>
+        <p style="font-size:16px; color:#555555; line-height:1.6; margin:0 0 8px;">
+            Hi <?= /* @noEscape */ $firstname ?>, your feedback matters to us — please let us know what went wrong and we'll do our best to put it right.
+        </p>
+        <?php if ($incrementId): ?>
+        <p style="font-size:14px; color:#888888; margin:0 0 24px;">
+            <strong>Your order:</strong> #<?= /* @noEscape */ $incrementId ?>
+        </p>
+        <?php endif; ?>
+
+        <form action="<?= /* @noEscape */ $formAction ?>" method="post" id="reviewautomation-feedback-form">
+            <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
+            <input type="hidden" name="token" value="<?= /* @noEscape */ $token ?>" />
+            <input type="hidden" name="form_token" value="<?= /* @noEscape */ $formToken ?>" />
+
+            <!-- Honeypot: hidden from humans, bots auto-fill it -->
+            <div style="position:absolute; left:-9999px;" aria-hidden="true">
+                <label for="website">Leave this empty</label>
+                <input type="text" name="website" id="website" value="" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <!-- Star rating -->
+            <div style="margin-bottom:20px;">
+                <label style="display:block; font-size:14px; color:#555555; margin-bottom:8px; font-weight:600;">
+                    How would you rate your experience? <span style="color:#888888; font-weight:400;">(optional)</span>
+                </label>
+                <div class="reviewautomation-star-rating" id="reviewautomation-star-rating" style="font-size:0; line-height:1;">
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                    <label style="display:inline-block; cursor:pointer; padding:0 2px;" title="<?= $i ?> star<?= $i > 1 ? 's' : '' ?>">
+                        <input type="radio" name="rating" value="<?= $i ?>"
+                               style="position:absolute; opacity:0; width:0; height:0;" />
+                        <span class="reviewautomation-star" data-star="<?= $i ?>"
+                              style="font-size:32px; color:#cccccc; transition:color 0.15s;">&#9733;</span>
+                    </label>
+                    <?php endfor; ?>
+                </div>
+            </div>
+
+            <!-- Feedback text -->
+            <div style="margin-bottom:20px;">
+                <label for="feedback_text"
+                       style="display:block; font-size:14px; color:#555555; margin-bottom:8px; font-weight:600;">
+                    Tell us what happened
+                </label>
+                <textarea name="feedback_text" id="feedback_text" rows="5"
+                          placeholder="What went wrong? The more detail you can give, the faster we can help..."
+                          required
+                          style="width:100%; padding:12px; border:1px solid #cccccc; border-radius:4px; font-family:Arial,Helvetica,sans-serif; font-size:15px; color:#333333; resize:vertical; box-sizing:border-box;"></textarea>
+            </div>
+
+            <button type="submit"
+                    style="display:inline-block; background-color:<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>; color:#ffffff; font-size:17px; font-weight:700; text-decoration:none; padding:14px 40px; border:none; border-radius:6px; cursor:pointer; font-family:Arial,Helvetica,sans-serif;">
+                Submit Feedback
+            </button>
+
+            <p style="font-size:13px; color:#888888; margin-top:16px; line-height:1.5;">
+                Your feedback goes straight to our team — it won't be posted publicly.
+            </p>
+        </form>
+    </div>
+</div>
+
+<script>
+// Minimal vanilla JS for star-rating interactivity — no RequireJS dependency.
+(function () {
+    var container = document.getElementById('reviewautomation-star-rating');
+    if (!container) return;
+    var stars = container.querySelectorAll('.reviewautomation-star');
+    var radios = container.querySelectorAll('input[type="radio"]');
+    var selected = 0;
+
+    function highlight(upTo) {
+        stars.forEach(function (s, idx) {
+            s.style.color = idx < upTo ? '<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>' : '#cccccc';
+        });
+    }
+
+    stars.forEach(function (star, idx) {
+        star.addEventListener('mouseenter', function () { highlight(idx + 1); });
+        star.addEventListener('click', function () {
+            selected = idx + 1;
+            radios[idx].checked = true;
+            highlight(selected);
+        });
+    });
+
+    container.addEventListener('mouseleave', function () { highlight(selected); });
+})();
+</script>

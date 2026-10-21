@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <!-- Parent group under Marketing -->
+        <add id="ReviewAutomation_Reviews::menu"
+             title="Review Automation"
+             module="ReviewAutomation_Reviews"
+             sortOrder="55"
+             parent="Magento_Backend::marketing"
+             resource="ReviewAutomation_Reviews::queue"/>
+
+        <add id="ReviewAutomation_Reviews::queue"
+             title="Review Queue"
+             module="ReviewAutomation_Reviews"
+             sortOrder="10"
+             parent="ReviewAutomation_Reviews::menu"
+             action="reviewautomation_reviewautomation/queue"
+             resource="ReviewAutomation_Reviews::queue"/>
+
+        <add id="ReviewAutomation_Reviews::feedback"
+             title="Customer Feedback"
+             module="ReviewAutomation_Reviews"
+             sortOrder="20"
+             parent="ReviewAutomation_Reviews::menu"
+             action="reviewautomation_reviewautomation/feedback"
+             resource="ReviewAutomation_Reviews::feedback"/>
+
+        <add id="ReviewAutomation_Reviews::unsubscribe"
+             title="Suppression List"
+             module="ReviewAutomation_Reviews"
+             sortOrder="30"
+             parent="ReviewAutomation_Reviews::menu"
+             action="reviewautomation_reviewautomation/unsubscribe/index"
+             resource="ReviewAutomation_Reviews::unsubscribe"/>
+
+        <add id="ReviewAutomation_Reviews::booster"
+             title="Review Booster"
+             module="ReviewAutomation_Reviews"
+             sortOrder="40"
+             parent="ReviewAutomation_Reviews::menu"
+             action="reviewautomation_reviewautomation/booster/index"
+             resource="ReviewAutomation_Reviews::booster"/>
+    </menu>
+</config>

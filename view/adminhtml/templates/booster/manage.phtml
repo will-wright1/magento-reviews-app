@@ -1,0 +1,163 @@
+<?php
+/**
+ * Review Booster — create a backfill batch and monitor existing ones.
+ *
+ * @var \ReviewAutomation\Reviews\Block\Adminhtml\Booster\Manage $block
+ */
+$batches = $block->getBatches();
+$formKey = $block->getFormKey();
+?>
+<style>
+    .vrb-card { background:#fff; border:1px solid #e0e0e0; border-radius:6px; padding:24px; margin:0 0 24px; max-width:900px; }
+    .vrb-card h2 { margin:0 0 8px; font-size:18px; }
+    .vrb-note { background:#fff8e5; border:1px solid #f0d67d; border-radius:4px; padding:12px 16px; font-size:13px; color:#5f5433; margin:0 0 20px; line-height:1.5; }
+    .vrb-form-row { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px; }
+    .vrb-field { display:flex; flex-direction:column; gap:4px; }
+    .vrb-field label { font-size:12px; font-weight:600; color:#555; text-transform:uppercase; letter-spacing:0.4px; }
+    .vrb-field input { padding:6px 10px; border:1px solid #adadad; border-radius:3px; min-width:150px; }
+    .vrb-actions { display:flex; gap:12px; align-items:center; }
+    .vrb-preview-result { font-size:14px; color:#1a1a1a; font-weight:600; }
+    .vrb-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .vrb-table th, .vrb-table td { text-align:left; padding:8px 10px; border-bottom:1px solid #eee; }
+    .vrb-table th { font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#888; }
+    .vrb-status { display:inline-block; padding:2px 10px; border-radius:10px; font-size:11px; font-weight:700; text-transform:uppercase; }
+    .vrb-status--active { background:#e3f4e4; color:#2e7d32; }
+    .vrb-status--paused { background:#fff3e0; color:#e65100; }
+    .vrb-status--completed { background:#e3f2fd; color:#1565c0; }
+    .vrb-status--cancelled { background:#f5f5f5; color:#757575; }
+    .vrb-inline-form { display:inline; }
+    .vrb-link-btn { background:none; border:none; color:#007bdb; cursor:pointer; padding:0; font-size:13px; text-decoration:underline; }
+</style>
+
+<div class="vrb-card">
+    <h2><?= $block->escapeHtml(__('Start a new booster batch')) ?></h2>
+    <p style="color:#666; font-size:13px; margin:0 0 16px;">
+        <?= $block->escapeHtml(__('Drip-feeds past customers into the normal review email flow (satisfaction check first — unhappy customers are still diverted to private feedback). All suppression rules, unsubscribes and the monthly rate limit apply.')) ?>
+    </p>
+    <div class="vrb-note">
+        <strong><?= $block->escapeHtml(__('Keep chunks modest.')) ?></strong>
+        <?= $block->escapeHtml(__('Google and Trustpilot both filter sudden review spikes, and large send bursts hurt email deliverability — 30–50 per day reads as organic. Response rates also drop sharply for orders older than ~6 months; going further back increases unsubscribes and spam complaints.')) ?>
+    </div>
+
+    <form method="post" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" id="vrb-create-form">
+        <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($formKey) ?>"/>
+        <div class="vrb-form-row">
+            <div class="vrb-field">
+                <label for="vrb-date-from"><?= $block->escapeHtml(__('Orders shipped from')) ?></label>
+                <input type="date" id="vrb-date-from" name="date_from" required/>
+            </div>
+            <div class="vrb-field">
+                <label for="vrb-date-to"><?= $block->escapeHtml(__('To')) ?></label>
+                <input type="date" id="vrb-date-to" name="date_to" required/>
+            </div>
+            <div class="vrb-field">
+                <label for="vrb-min-value"><?= $block->escapeHtml(__('Min order value (£, 0 = none)')) ?></label>
+                <input type="number" id="vrb-min-value" name="min_order_value" value="0" min="0" step="0.01"/>
+            </div>
+            <div class="vrb-field">
+                <label for="vrb-per-day"><?= $block->escapeHtml(__('Emails per day (max 500)')) ?></label>
+                <input type="number" id="vrb-per-day" name="per_day" value="40" min="1" max="500"/>
+            </div>
+        </div>
+        <div class="vrb-actions">
+            <button type="button" class="action-secondary" id="vrb-preview-btn">
+                <span><?= $block->escapeHtml(__('Preview eligible customers')) ?></span>
+            </button>
+            <span class="vrb-preview-result" id="vrb-preview-result"></span>
+            <button type="submit" class="action-primary">
+                <span><?= $block->escapeHtml(__('Start batch')) ?></span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="vrb-card">
+    <h2><?= $block->escapeHtml(__('Batches')) ?></h2>
+    <?php if ($batches->getSize() === 0): ?>
+        <p style="color:#888;"><?= $block->escapeHtml(__('No booster batches yet.')) ?></p>
+    <?php else: ?>
+    <table class="vrb-table">
+        <thead>
+        <tr>
+            <th><?= $block->escapeHtml(__('ID')) ?></th>
+            <th><?= $block->escapeHtml(__('Status')) ?></th>
+            <th><?= $block->escapeHtml(__('Date range')) ?></th>
+            <th><?= $block->escapeHtml(__('Min value')) ?></th>
+            <th><?= $block->escapeHtml(__('Per day')) ?></th>
+            <th><?= $block->escapeHtml(__('Queued')) ?></th>
+            <th><?= $block->escapeHtml(__('Email 1 sent')) ?></th>
+            <th><?= $block->escapeHtml(__('Created by')) ?></th>
+            <th><?= $block->escapeHtml(__('Last fed')) ?></th>
+            <th><?= $block->escapeHtml(__('Actions')) ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($batches as $batch): ?>
+            <?php
+            $batchId = (int) $batch->getId();
+            $status = (string) $batch->getData('status');
+            ?>
+            <tr>
+                <td>#<?= $batchId ?></td>
+                <td><span class="vrb-status vrb-status--<?= $block->escapeHtmlAttr($status) ?>"><?= $block->escapeHtml($status) ?></span></td>
+                <td><?= $block->escapeHtml($batch->getData('date_from')) ?> &rarr; <?= $block->escapeHtml($batch->getData('date_to')) ?></td>
+                <td><?= $block->escapeHtml(number_format((float) $batch->getData('min_order_value'), 2)) ?></td>
+                <td><?= (int) $batch->getData('per_day') ?></td>
+                <td><?= (int) $batch->getData('total_queued') ?></td>
+                <td><?= (int) $block->getSentCount($batchId) ?></td>
+                <td><?= $block->escapeHtml((string) ($batch->getData('created_by') ?: '—')) ?></td>
+                <td><?= $block->escapeHtml((string) ($batch->getData('last_run_at') ?: '—')) ?></td>
+                <td>
+                    <?php foreach (['pause' => __('Pause'), 'resume' => __('Resume'), 'cancel' => __('Cancel')] as $action => $label): ?>
+                        <?php
+                        $visible = ($action === 'pause' && $status === 'active')
+                            || ($action === 'resume' && $status === 'paused')
+                            || ($action === 'cancel' && in_array($status, ['active', 'paused'], true));
+                        if (!$visible) {
+                            continue;
+                        }
+                        ?>
+                        <form method="post" class="vrb-inline-form"
+                              action="<?= $block->escapeUrl($block->getChangeStatusUrl()) ?>"
+                              <?php if ($action === 'cancel'): ?>onsubmit="return confirm('<?= $block->escapeJs(__('Cancel this batch? Rows already queued will still be processed.')) ?>');"<?php endif; ?>>
+                            <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($formKey) ?>"/>
+                            <input type="hidden" name="batch_id" value="<?= $batchId ?>"/>
+                            <input type="hidden" name="batch_action" value="<?= $block->escapeHtmlAttr($action) ?>"/>
+                            <button type="submit" class="vrb-link-btn"><?= $block->escapeHtml($label) ?></button>
+                        </form>
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php endif; ?>
+</div>
+
+<script>
+require(['jquery'], function ($) {
+    'use strict';
+
+    $('#vrb-preview-btn').on('click', function () {
+        var $result = $('#vrb-preview-result');
+        $result.text('<?= $block->escapeJs(__('Counting…')) ?>');
+
+        $.post('<?= $block->escapeJs($block->getPreviewUrl()) ?>', {
+            form_key: '<?= $block->escapeJs($formKey) ?>',
+            date_from: $('#vrb-date-from').val(),
+            date_to: $('#vrb-date-to').val(),
+            min_order_value: $('#vrb-min-value').val()
+        }).done(function (data) {
+            if (data && data.error) {
+                $result.text(data.error);
+            } else if (data && typeof data.count !== 'undefined') {
+                $result.text('<?= $block->escapeJs(__('Eligible customers:')) ?> ' + data.count);
+            } else {
+                $result.text('<?= $block->escapeJs(__('Preview failed.')) ?>');
+            }
+        }).fail(function () {
+            $result.text('<?= $block->escapeJs(__('Preview failed.')) ?>');
+        });
+    });
+});
+</script>

@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">reviewautomation_review_feedback_listing.reviewautomation_review_feedback_listing_data_source</item>
+        </item>
+    </argument>
+
+    <settings>
+        <spinner>reviewautomation_review_feedback_columns</spinner>
+        <deps>
+            <dep>reviewautomation_review_feedback_listing.reviewautomation_review_feedback_listing_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="reviewautomation_review_feedback_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">feedback_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>ReviewAutomation_Reviews::feedback</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="reviewautomation_review_feedback_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>feedback_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <filterSelect name="is_resolved" provider="${ $.parentName }">
+                <settings>
+                    <options class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\ResolvedOptions"/>
+                    <caption translate="true">All</caption>
+                    <label translate="true">Resolved</label>
+                    <dataScope>is_resolved</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+        <paging name="listing_paging"/>
+        <exportButton name="export_button"/>
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="resolve">
+                <settings>
+                    <confirm>
+                        <message translate="true">Mark the selected feedback(s) as resolved?</message>
+                        <title translate="true">Mark as Resolved</title>
+                    </confirm>
+                    <url path="reviewautomation_reviewautomation/feedback/massResolve"/>
+                    <type>resolve</type>
+                    <label translate="true">Mark as Resolved</label>
+                </settings>
+            </action>
+        </massaction>
+    </listingToolbar>
+
+    <columns name="reviewautomation_review_feedback_columns">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>feedback_id</indexField>
+            </settings>
+        </selectionsColumn>
+
+        <column name="feedback_id" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+
+        <column name="order_increment_id"
+                class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\OrderLink"
+                sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Order #</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+            </settings>
+        </column>
+
+        <column name="customer_firstname" sortOrder="30">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Customer Name</label>
+            </settings>
+        </column>
+
+        <column name="customer_email" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Customer Email</label>
+            </settings>
+        </column>
+
+        <column name="rating" class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\Rating"
+                sortOrder="50">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Rating</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+            </settings>
+        </column>
+
+        <column name="feedback_text"
+                class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\TruncatedText"
+                sortOrder="60">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Feedback</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+            </settings>
+        </column>
+
+        <column name="is_resolved" component="Magento_Ui/js/grid/columns/select" sortOrder="70">
+            <settings>
+                <filter>select</filter>
+                <label translate="true">Resolved</label>
+                <dataType>select</dataType>
+                <options class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\ResolvedOptions"/>
+            </settings>
+        </column>
+
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="80">
+            <settings>
+                <filter>dateRange</filter>
+                <label translate="true">Created At</label>
+                <dataType>date</dataType>
+            </settings>
+        </column>
+
+        <actionsColumn name="actions"
+                       class="ReviewAutomation\Reviews\Ui\Component\Listing\Column\FeedbackActions"
+                       sortOrder="90">
+            <settings>
+                <indexField>feedback_id</indexField>
+                <label translate="true">Actions</label>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

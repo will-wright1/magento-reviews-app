@@ -1,0 +1,59 @@
+<?php
+/**
+ * Public review landing page, available for all satisfaction responses.
+ *
+ * @var \ReviewAutomation\Reviews\Block\Thankyou $block
+ */
+$showGoogle    = $block->shouldShowGoogle();
+$showTrustpilot = $block->shouldShowTrustpilot();
+$googleUrl     = $block->escapeUrl($block->getGoogleCtaUrl());
+$trustpilotUrl = $block->escapeUrl($block->getTrustpilotCtaUrl());
+?>
+<?php if ($block->getData('branding')->getLogoUrl()): ?>
+    <p style="text-align:center"><img style="max-width:220px;max-height:80px" src="<?= $block->escapeUrl($block->getData('branding')->getLogoUrl()) ?>" alt="<?= $block->escapeHtmlAttr($block->getData('branding')->getName()) ?>"></p>
+<?php endif; ?>
+<div class="reviewautomation-review-thankyou" style="max-width:640px; margin:40px auto; text-align:center; font-family:Arial,Helvetica,sans-serif;">
+    <div style="background-color:#1a1a1a; padding:32px; border-radius:6px 6px 0 0;">
+        <div style="font-size:28px; font-weight:700; letter-spacing:2px; color:#ffffff;"><?= $block->escapeHtml($block->getData('branding')->getName()) ?></div>
+        <div style="width:60px; height:3px; background-color:<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>; margin:10px auto 0;"></div>
+    </div>
+
+    <div style="background-color:#ffffff; padding:40px 32px 32px; border:1px solid #e0e0e0; border-top:none; border-radius:0 0 6px 6px;">
+        <h1 style="font-size:24px; color:#1a1a1a; margin:0 0 16px;">Share your experience</h1>
+        <p style="font-size:16px; color:#555555; line-height:1.6; margin:0 0 24px;">
+            We welcome your honest review, whatever your experience. Your feedback helps other customers make an informed choice.
+        </p>
+
+        <?php if ($showGoogle): ?>
+        <div style="margin-bottom:12px;">
+            <a href="<?= /* @noEscape */ $googleUrl ?>"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="display:inline-block; background-color:<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>; color:#ffffff; font-size:17px; font-weight:700; text-decoration:none; padding:16px 40px; border-radius:6px; min-width:260px;">
+                Review us on Google
+            </a>
+        </div>
+        <?php endif; ?>
+
+        <?php if ($showTrustpilot): ?>
+        <div style="margin-bottom:12px;">
+            <a href="<?= /* @noEscape */ $trustpilotUrl ?>"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="display:inline-block; background-color:<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>; color:#ffffff; font-size:17px; font-weight:700; text-decoration:none; padding:16px 40px; border-radius:6px; min-width:260px;">
+                Review us on Trustpilot
+            </a>
+        </div>
+        <?php endif; ?>
+
+        <?php if (!$showGoogle && !$showTrustpilot): ?>
+        <p style="font-size:14px; color:#888888;">
+            We'll be adding review links soon — thank you for your patience!
+        </p>
+        <?php endif; ?>
+
+        <p style="font-size:14px; color:#888888; margin-top:24px;">
+            Thank you for sharing your feedback.
+        </p>
+    </div>
+</div>

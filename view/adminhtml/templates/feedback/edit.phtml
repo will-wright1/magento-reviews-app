@@ -1,0 +1,109 @@
+<?php
+/**
+ * Admin feedback detail/edit view.
+ *
+ * @var \ReviewAutomation\Reviews\Block\Adminhtml\Feedback\Edit $block
+ */
+$feedback   = $block->getFeedback();
+$saveUrl    = $block->escapeUrl($block->getSaveUrl());
+$backUrl    = $block->escapeUrl($block->getBackUrl());
+$orderUrl   = $block->escapeUrl($block->getOrderUrl());
+$stars       = $block->escapeHtml($block->getRatingStars());
+?>
+<?php if (!$feedback->getId()): ?>
+    <div class="message message-warning">
+        <span><?= $block->escapeHtml(__('Feedback not found.')) ?></span>
+    </div>
+<?php else: ?>
+<div class="page-main-actions" style="margin-bottom:20px;">
+    <a href="<?= /* @noEscape */ $backUrl ?>" class="action-back" title="<?= $block->escapeHtmlAttr(__('Back')) ?>">
+        <span><?= $block->escapeHtml(__('Back to Grid')) ?></span>
+    </a>
+</div>
+
+<div class="admin__page-section" style="max-width:900px;">
+    <div class="admin__page-section-title">
+        <span class="title">
+            <?= $block->escapeHtml(__('Feedback #%1', $feedback->getId())) ?>
+        </span>
+    </div>
+
+    <div class="admin__page-section-content">
+        <table class="admin__table-secondary" style="width:100%; margin-bottom:24px;">
+            <tbody>
+                <tr>
+                    <th style="width:160px;"><?= $block->escapeHtml(__('Order #')) ?></th>
+                    <td>
+                        <a href="<?= /* @noEscape */ $orderUrl ?>">
+                            <?= $block->escapeHtml($feedback->getOrderIncrementId()) ?>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?= $block->escapeHtml(__('Customer')) ?></th>
+                    <td>
+                        <?= $block->escapeHtml($feedback->getCustomerFirstname()) ?>
+                        (<?= $block->escapeHtml($feedback->getCustomerEmail()) ?>)
+                    </td>
+                </tr>
+                <tr>
+                    <th><?= $block->escapeHtml(__('Rating')) ?></th>
+                    <td style="color:#F58220; font-size:18px; letter-spacing:2px;">
+                        <?= /* @noEscape */ $stars ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?= $block->escapeHtml(__('Submitted')) ?></th>
+                    <td><?= $block->escapeHtml($feedback->getCreatedAt()) ?></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-bottom:24px;">
+            <h3 style="font-size:14px; font-weight:600; margin:0 0 8px;"><?= $block->escapeHtml(__('Customer Feedback')) ?></h3>
+            <div style="padding:16px; background:#f9f9f9; border-left:4px solid #F58220; border-radius:4px; font-size:14px; line-height:1.6; color:#333;">
+                <?= /* @noEscape */ nl2br($block->escapeHtml($feedback->getFeedbackText())) ?>
+            </div>
+        </div>
+
+        <form action="<?= /* @noEscape */ $saveUrl ?>" method="post" id="reviewautomation-feedback-edit-form">
+            <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
+            <input type="hidden" name="feedback_id" value="<?= (int) $feedback->getId() ?>" />
+
+            <fieldset class="admin__fieldset">
+                <div class="admin__field">
+                    <label class="admin__field-label" for="is_resolved">
+                        <span><?= $block->escapeHtml(__('Resolved')) ?></span>
+                    </label>
+                    <div class="admin__field-control">
+                        <select name="is_resolved" id="is_resolved" class="admin__control-select">
+                            <option value="0" <?= !$feedback->getIsResolved() ? 'selected' : '' ?>><?= $block->escapeHtml(__('No')) ?></option>
+                            <option value="1" <?= $feedback->getIsResolved() ? 'selected' : '' ?>><?= $block->escapeHtml(__('Yes')) ?></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="admin__field">
+                    <label class="admin__field-label" for="admin_notes">
+                        <span><?= $block->escapeHtml(__('Admin Notes')) ?></span>
+                    </label>
+                    <div class="admin__field-control">
+                        <textarea name="admin_notes" id="admin_notes" rows="6"
+                                  class="admin__control-textarea"
+                                  style="width:100%;"><?= $block->escapeHtml($feedback->getAdminNotes()) ?></textarea>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="admin__page-actions" style="margin-top:16px;">
+                <button type="submit" class="action-primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>">
+                    <span><?= $block->escapeHtml(__('Save')) ?></span>
+                </button>
+                <a href="<?= /* @noEscape */ $backUrl ?>" class="action-secondary">
+                    <span><?= $block->escapeHtml(__('Cancel')) ?></span>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+<?php endif; ?>

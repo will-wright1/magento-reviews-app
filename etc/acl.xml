@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <!-- Marketing menu ACL -->
+                <resource id="Magento_Backend::marketing">
+                    <resource id="ReviewAutomation_Reviews::queue"
+                              title="Review Automation — Queue"
+                              sortOrder="60"/>
+                    <resource id="ReviewAutomation_Reviews::feedback"
+                              title="Review Automation — Customer Feedback"
+                              sortOrder="61"/>
+                    <resource id="ReviewAutomation_Reviews::unsubscribe"
+                              title="Review Automation — Suppression List"
+                              sortOrder="62"/>
+                    <resource id="ReviewAutomation_Reviews::booster"
+                              title="Review Automation — Review Booster"
+                              sortOrder="63"/>
+                </resource>
+                <!-- Config ACL -->
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="ReviewAutomation_Reviews::config"
+                                      title="Review Automation Config"
+                                      sortOrder="100"/>
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

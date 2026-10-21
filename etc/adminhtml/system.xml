@@ -1,0 +1,247 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="reviewautomation" translate="label" sortOrder="400">
+            <label>Review Automation</label>
+        </tab>
+        <section id="reviewautomation_review_automation" translate="label" sortOrder="10"
+                 showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Review Automation</label>
+            <tab>reviewautomation</tab>
+            <resource>ReviewAutomation_Reviews::config</resource>
+
+            <group id="filters" translate="label" sortOrder="5"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Order Filters</label>
+                <field id="allowed_store_ids" translate="label comment" type="multiselect" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Allowed Store Views</label>
+                    <source_model>ReviewAutomation\Reviews\Model\Config\Source\AllowedStores</source_model>
+                    <comment><![CDATA[
+                        Only orders placed through these store views will be processed for review emails.
+                        Select only store views whose customers should receive review requests. If empty, no orders will be processed (fail-safe default).
+                    ]]></comment>
+                </field>
+                <field id="max_order_age_days" translate="label comment" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Maximum Order Age (days)</label>
+                    <validate>validate-digits validate-digits-range digits-range-1-365</validate>
+                    <comment><![CDATA[
+                        Only orders created within this many days will be processed. Orders older than this
+                        are skipped permanently. Default is 60. Range 1&ndash;365.
+                    ]]></comment>
+                </field>
+            </group>
+
+            <group id="general" translate="label" type="text" sortOrder="10"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Settings</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Module</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="email1_delay_days" translate="label comment" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email 1 Delay (days)</label>
+                    <comment>Days after order completion before the satisfaction check email is sent.</comment>
+                    <validate>validate-digits validate-zero-or-greater</validate>
+                </field>
+                <field id="email1_reminder_delay_days" translate="label comment" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email 1 Reminder Delay (days)</label>
+                    <comment>Days after Email 1 before sending one reminder if the customer has not clicked happy or unhappy.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
+                <field id="email2_delay_hours" translate="label comment" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email 2 Delay (hours)</label>
+                    <comment>Hours after the satisfaction email before the company review request is sent, regardless of response. Default 96.</comment>
+                    <validate>validate-digits validate-zero-or-greater</validate>
+                </field>
+                <field id="product_review_delay_days" translate="label comment" type="text" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Review Delay (days)</label>
+                    <comment>Days after Email 2 (the company review request) before the product review request is sent. Default is 14.</comment>
+                    <validate>validate-digits validate-zero-or-greater</validate>
+                </field>
+                <field id="token_expiry_days" translate="label comment" type="text" sortOrder="60"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Token Expiry (days)</label>
+                    <comment>Click links expire this many days after the queue entry was created.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
+                <field id="sender_name" translate="label" type="text" sortOrder="70"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sender Name</label>
+                </field>
+                <field id="sender_email" translate="label" type="text" sortOrder="80"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sender Email</label>
+                    <validate>validate-email</validate>
+                </field>
+                <field id="admin_notification_email" translate="label comment" type="text" sortOrder="90"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Admin Notification Email</label>
+                    <comment>Where private feedback notifications are sent.</comment>
+                    <validate>validate-email</validate>
+                </field>
+                <field id="satisfaction_email_template" translate="label comment" type="select" sortOrder="100"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Satisfaction Check Email Template</label>
+                    <source_model>ReviewAutomation\Reviews\Model\Config\Source\EmailTemplate</source_model>
+                    <comment>Default is "Review Automation — Review Satisfaction Check (Email 1)". Create a copy in Marketing → Email Templates to customise.</comment>
+                </field>
+                <field id="satisfaction_reminder_email_template" translate="label comment" type="select" sortOrder="110"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Satisfaction Reminder Email Template</label>
+                    <source_model>ReviewAutomation\Reviews\Model\Config\Source\EmailTemplate</source_model>
+                    <comment>Default is "Review Automation — Review Satisfaction Reminder". Create a copy in Marketing → Email Templates to customise.</comment>
+                </field>
+                <field id="review_request_email_template" translate="label comment" type="select" sortOrder="120"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Company Review Request Email Template</label>
+                    <source_model>ReviewAutomation\Reviews\Model\Config\Source\EmailTemplate</source_model>
+                    <comment>Default is "Review Automation — Company Review Request (Email 2)". Create a copy in Marketing → Email Templates to customise.</comment>
+                </field>
+                <field id="product_review_request_email_template" translate="label comment" type="select" sortOrder="130"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Review Request Email Template</label>
+                    <source_model>ReviewAutomation\Reviews\Model\Config\Source\EmailTemplate</source_model>
+                    <comment>Default is "Review Automation — Product Review Request (Email 3)". Create a copy in Marketing → Email Templates to customise.</comment>
+                </field>
+                <field id="admin_notification_email_template" translate="label comment" type="select" sortOrder="140"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Admin Feedback Notification Template</label>
+                    <source_model>ReviewAutomation\Reviews\Model\Config\Source\EmailTemplate</source_model>
+                    <comment>Default is "Review Automation — Admin Feedback Notification". Create a copy in Marketing → Email Templates to customise.</comment>
+                </field>
+                <field id="reply_to_email" translate="label comment" type="text" sortOrder="145"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Reply-To Email</label>
+                    <comment>Customer replies to review emails go here. Use a monitored inbox — unanswered replies tend to become public negative reviews. Leave empty to disable (replies then go to the sender address).</comment>
+                    <validate>validate-email</validate>
+                </field>
+                <field id="send_window_enabled" translate="label comment" type="select" sortOrder="150"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Restrict Sending to Daytime Window</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>When enabled, review emails only send between the start and end hour (store timezone). Overnight rows wait for the next morning's cron run.</comment>
+                </field>
+                <field id="send_window_start_hour" translate="label comment" type="text" sortOrder="151"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Send Window Start Hour (0–23)</label>
+                    <comment>Inclusive. Default 8 (08:00).</comment>
+                    <validate>validate-digits validate-digits-range digits-range-0-23</validate>
+                    <depends><field id="send_window_enabled">1</field></depends>
+                </field>
+                <field id="send_window_end_hour" translate="label comment" type="text" sortOrder="152"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Send Window End Hour (1–24)</label>
+                    <comment>Exclusive. Default 19 (last send 18:59).</comment>
+                    <validate>validate-digits validate-digits-range digits-range-1-24</validate>
+                    <depends><field id="send_window_enabled">1</field></depends>
+                </field>
+                <field id="email2_nudge_enabled" translate="label comment" type="select" sortOrder="160"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Email 2 Second-Chance Nudge</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>One follow-up to customers who received Email 2 but never clicked through to the review platform. Sent once, never repeated.</comment>
+                </field>
+                <field id="email2_nudge_delay_days" translate="label comment" type="text" sortOrder="161"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Nudge Delay (days after Email 2)</label>
+                    <comment>Default 5.</comment>
+                    <validate>validate-digits</validate>
+                    <depends><field id="email2_nudge_enabled">1</field></depends>
+                </field>
+                <field id="review_request_nudge_email_template" translate="label comment" type="select" sortOrder="162"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Nudge Email Template</label>
+                    <source_model>ReviewAutomation\Reviews\Model\Config\Source\EmailTemplate</source_model>
+                    <comment>Default is "Review Automation — Company Review Request Nudge (Email 2 follow-up)". Create a copy in Marketing → Email Templates to customise.</comment>
+                    <depends><field id="email2_nudge_enabled">1</field></depends>
+                </field>
+
+                <field id="send_test_email" translate="label comment" type="button" sortOrder="999"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Test Email Pipeline</label>
+                    <frontend_model>ReviewAutomation\Reviews\Block\Adminhtml\System\Config\SendTestEmailButton</frontend_model>
+                    <comment><![CDATA[
+                        Sends a test Email 1 (satisfaction check) to the logged-in admin's email address using the latest eligible order's data.
+                        If no eligible order exists, mock data is used and the result is labelled accordingly.
+                        Use this to verify the email pipeline is working without waiting for cron.
+                    ]]></comment>
+                </field>
+            </group>
+
+            <group id="branding" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Branding</label>
+                <field id="name" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Business Name</label><comment>Falls back to the store or sender name.</comment>
+                </field>
+                <field id="accent_color" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Accent Colour</label><comment>Six-digit hex colour, for example #2563eb.</comment>
+                </field>
+                <field id="logo_url" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo URL</label><comment>Optional absolute HTTPS image URL. Otherwise the business name is displayed.</comment><validate>validate-url</validate>
+                </field>
+            </group>
+            <group id="platforms" translate="label" type="text" sortOrder="20"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Review Platforms</label>
+                <field id="google_url" translate="label comment" type="text" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Google Review URL</label>
+                    <comment>Direct Google review link for the business.</comment>
+                </field>
+                <field id="trustpilot_url" translate="label comment" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Trustpilot Review URL</label>
+                    <comment>Direct Trustpilot review link.</comment>
+                </field>
+                <field id="primary_platform" translate="label comment" type="select" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Primary Platform</label>
+                    <comment>Which review platform appears in Email 2. Both sends one CTA per email, split 50/50 between Google and Trustpilot.</comment>
+                    <source_model>ReviewAutomation\Reviews\Model\Config\Source\PrimaryPlatform</source_model>
+                </field>
+                <field id="gmail_targeting_enabled" translate="label comment" type="select" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Target Google CTA at Gmail Addresses</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Only applies when Primary Platform is Both. Customers with a gmail.com / googlemail.com address (who definitely have the Google account a Google review requires) get the Google CTA; everyone else gets Trustpilot. Disable to return to the 50/50 split.</comment>
+                    <depends><field id="primary_platform">both</field></depends>
+                </field>
+            </group>
+
+            <group id="suppression" translate="label" type="text" sortOrder="30"
+                   showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Suppression Rules</label>
+                <field id="suppress_refunded" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Suppress for Refunded Orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="suppress_cancelled" translate="label" type="select" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Suppress for Cancelled Orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="min_order_value" translate="label comment" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Minimum Order Value</label>
+                    <comment>Orders below this grand total don't trigger the funnel.</comment>
+                    <validate>validate-number validate-zero-or-greater</validate>
+                </field>
+                <field id="max_emails_per_month" translate="label comment" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Maximum Emails Per Customer Per Month</label>
+                    <comment>Rate limit — if a customer places multiple orders in a calendar month, only this many trigger the funnel.</comment>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

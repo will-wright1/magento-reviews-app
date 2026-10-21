@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+
+    <!-- Review funnel queue: one row per order entering the funnel. -->
+    <table name="reviewautomation_review_queue" resource="default" engine="innodb"
+           comment="Review Automation Queue">
+        <column xsi:type="int" name="queue_id" unsigned="true" nullable="false"
+                identity="true" comment="Queue ID"/>
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false"
+                comment="Sales Order Entity ID"/>
+        <column xsi:type="varchar" name="order_increment_id" nullable="false" length="32"
+                comment="Order Increment ID"/>
+        <column xsi:type="varchar" name="customer_email" nullable="false" length="255"
+                comment="Customer Email"/>
+        <column xsi:type="varchar" name="customer_firstname" nullable="true" length="255"
+                comment="Customer First Name"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false"
+                default="0" comment="Store ID"/>
+        <column xsi:type="varchar" name="token" nullable="false" length="64"
+                comment="Unique tokenised click identifier"/>
+        <column xsi:type="varchar" name="status" nullable="false" length="32"
+                default="pending" comment="Queue status"/>
+        <column xsi:type="varchar" name="sentiment" nullable="true" length="16"
+                comment="happy or unhappy (null until clicked)"/>
+        <column xsi:type="datetime" name="email1_sent_at" nullable="true"
+                comment="Email 1 (satisfaction check) sent at"/>
+        <column xsi:type="datetime" name="email1_reminder_sent_at" nullable="true"
+                comment="Email 1 reminder sent at"/>
+        <column xsi:type="datetime" name="email2_sent_at" nullable="true"
+                comment="Email 2 (review request) sent at"/>
+        <column xsi:type="datetime" name="email2_nudge_sent_at" nullable="true"
+                comment="Email 2 second-chance nudge sent at"/>
+        <column xsi:type="datetime" name="product_review_sent_at" nullable="true"
+                comment="Email 3 (product review request) sent at"/>
+        <column xsi:type="datetime" name="clicked_at" nullable="true"
+                comment="When the customer clicked happy or unhappy"/>
+        <column xsi:type="varchar" name="platform_clicked" nullable="true" length="16"
+                comment="Public review platform CTA clicked: google or trustpilot"/>
+        <column xsi:type="datetime" name="platform_click_at" nullable="true"
+                comment="When the customer first clicked a public review platform CTA"/>
+        <column xsi:type="varchar" name="source" nullable="false" length="16"
+                default="organic" comment="Row origin: organic (cron populate) or booster"/>
+        <column xsi:type="smallint" name="age_exempt" unsigned="true" nullable="false"
+                default="0" comment="1 = skip the max-order-age dispatch check (booster rows)"/>
+        <column xsi:type="int" name="booster_batch_id" unsigned="true" nullable="true"
+                comment="FK to reviewautomation_review_booster_batch.batch_id (NULL for organic rows)"/>
+        <column xsi:type="datetime" name="created_at" nullable="false"
+                default="CURRENT_TIMESTAMP" comment="Created at"/>
+        <column xsi:type="datetime" name="updated_at" nullable="false"
+                default="CURRENT_TIMESTAMP" on_update="true" comment="Updated at"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="queue_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="REVIEWAUTOMATION_REVIEW_QUEUE_TOKEN">
+            <column name="token"/>
+        </constraint>
+        <index referenceId="REVIEWAUTOMATION_REVIEW_QUEUE_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+        <index referenceId="REVIEWAUTOMATION_REVIEW_QUEUE_CUSTOMER_EMAIL" indexType="btree">
+            <column name="customer_email"/>
+        </index>
+        <constraint xsi:type="unique" referenceId="REVIEWAUTOMATION_REVIEW_QUEUE_ORDER_UNIQUE">
+            <column name="order_id"/>
+        </constraint>
+        <index referenceId="REVIEWAUTOMATION_REVIEW_QUEUE_BOOSTER_BATCH_ID" indexType="btree">
+            <column name="booster_batch_id"/>
+        </index>
+    </table>
+
+    <!-- Review Booster: admin-defined backfill batches drip-fed into the queue. -->
+    <table name="reviewautomation_review_booster_batch" resource="default" engine="innodb"
+           comment="Review Automation Booster Batches">
+        <column xsi:type="int" name="batch_id" unsigned="true" nullable="false"
+                identity="true" comment="Batch ID"/>
+        <column xsi:type="varchar" name="status" nullable="false" length="16"
+                default="active" comment="active | paused | completed | cancelled"/>
+        <column xsi:type="date" name="date_from" nullable="false"
+                comment="Order anchor window start (inclusive)"/>
+        <column xsi:type="date" name="date_to" nullable="false"
+                comment="Order anchor window end (inclusive)"/>
+        <column xsi:type="decimal" name="min_order_value" scale="4" precision="20"
+                unsigned="false" nullable="false" default="0"
+                comment="Minimum order grand total (0 = no minimum)"/>
+        <column xsi:type="int" name="per_day" unsigned="true" nullable="false"
+                default="50" comment="Maximum rows queued per calendar day"/>
+        <column xsi:type="int" name="total_queued" unsigned="true" nullable="false"
+                default="0" comment="Rows queued so far by this batch"/>
+        <column xsi:type="varchar" name="created_by" nullable="true" length="255"
+                comment="Admin username that created the batch"/>
+        <column xsi:type="datetime" name="last_run_at" nullable="true"
+                comment="Last time the drip cron fed from this batch"/>
+        <column xsi:type="datetime" name="created_at" nullable="false"
+                default="CURRENT_TIMESTAMP" comment="Created at"/>
+        <column xsi:type="datetime" name="updated_at" nullable="false"
+                default="CURRENT_TIMESTAMP" on_update="true" comment="Updated at"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="batch_id"/>
+        </constraint>
+        <index referenceId="REVIEWAUTOMATION_REVIEW_BOOSTER_BATCH_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+    </table>
+
+    <!-- Private feedback from unhappy customers. -->
+    <table name="reviewautomation_review_feedback" resource="default" engine="innodb"
+           comment="Review Automation Private Feedback">
+        <column xsi:type="int" name="feedback_id" unsigned="true" nullable="false"
+                identity="true" comment="Feedback ID"/>
+        <column xsi:type="int" name="queue_id" unsigned="true" nullable="false"
+                comment="FK to reviewautomation_review_queue.queue_id"/>
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false"
+                comment="Sales Order Entity ID"/>
+        <column xsi:type="varchar" name="order_increment_id" nullable="false" length="32"
+                comment="Order Increment ID"/>
+        <column xsi:type="varchar" name="customer_email" nullable="false" length="255"
+                comment="Customer Email"/>
+        <column xsi:type="varchar" name="customer_firstname" nullable="true" length="255"
+                comment="Customer First Name"/>
+        <column xsi:type="text" name="feedback_text" nullable="false"
+                comment="Customer's complaint/feedback text"/>
+        <column xsi:type="smallint" name="rating" unsigned="true" nullable="true"
+                comment="Optional 1-5 star rating"/>
+        <column xsi:type="smallint" name="is_resolved" unsigned="true" nullable="false"
+                default="0" comment="0=No, 1=Yes"/>
+        <column xsi:type="text" name="admin_notes" nullable="true"
+                comment="Internal admin notes"/>
+        <column xsi:type="datetime" name="created_at" nullable="false"
+                default="CURRENT_TIMESTAMP" comment="Created at"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="feedback_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="REVIEWAUTOMATION_REVIEW_FEEDBACK_QUEUE_UNIQUE">
+            <column name="queue_id"/>
+        </constraint>
+        <index referenceId="REVIEWAUTOMATION_REVIEW_FEEDBACK_IS_RESOLVED" indexType="btree">
+            <column name="is_resolved"/>
+        </index>
+        <index referenceId="REVIEWAUTOMATION_REVIEW_FEEDBACK_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
+    </table>
+
+    <!-- Unsubscribe list — customers who opted out of review requests. -->
+    <table name="reviewautomation_review_unsubscribe" resource="default" engine="innodb"
+           comment="Review Automation Unsubscribe List">
+        <column xsi:type="int" name="unsubscribe_id" unsigned="true" nullable="false"
+                identity="true" comment="Unsubscribe ID"/>
+        <column xsi:type="varchar" name="customer_email" nullable="false" length="255"
+                comment="Customer Email"/>
+        <column xsi:type="datetime" name="created_at" nullable="false"
+                default="CURRENT_TIMESTAMP" comment="Unsubscribed at"/>
+        <column xsi:type="varchar" name="reason" nullable="true" length="255"
+                comment="Admin-entered reason for suppression (NULL for self-unsubscribe)"/>
+        <column xsi:type="varchar" name="source" nullable="false" length="64"
+                default="customer_self_unsubscribe"
+                comment="Source: customer_self_unsubscribe | admin_order_grid | admin_order_view | admin_manual_grid | legacy_import"/>
+        <column xsi:type="int" name="created_by_admin_user_id" unsigned="true" nullable="true"
+                comment="admin_user.user_id of the admin who created this row (soft reference, NULL for self-unsubscribe)"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="unsubscribe_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="REVIEWAUTOMATION_REVIEW_UNSUB_EMAIL_UNIQUE">
+            <column name="customer_email"/>
+        </constraint>
+        <index referenceId="REVIEWAUTOMATION_REVIEW_UNSUB_SOURCE_IDX" indexType="btree">
+            <column name="source"/>
+        </index>
+    </table>
+
+</schema>
