@@ -180,9 +180,9 @@ class ProductReviewRequestEmail
             $url = $this->esc($product['url']);
             $rows .= <<<HTML
 <tr>
-    <td style="padding:14px 0; border-bottom:1px solid #f0f0f0;">
-        <div style="font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:700; color:#1a1a1a; line-height:1.4; margin:0 0 10px 0;">{$name}</div>
-        <a href="{$url}" target="_blank" rel="noopener" style="display:inline-block; background-color:__ACCENT_COLOR__; color:#ffffff; font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:700; text-decoration:none; padding:12px 22px; border-radius:6px; text-align:center;">
+    <td class="order-item" style="padding:16px 0; border-bottom:1px solid #e4e8e7;">
+        <div class="order-name" style="font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:700; color:#1a1a1a; line-height:1.4; margin:0 0 14px 0; overflow-wrap:anywhere;">{$name}</div>
+        <a class="email-button" href="{$url}" target="_blank" rel="noopener" style="display:block; background-color:#243b53; border:1px solid #243b53; color:#ffffff; font-family:Arial,Helvetica,sans-serif; font-size:16px; line-height:22px; font-weight:700; text-decoration:none; padding:16px 20px; border-radius:4px; mso-padding-alt:0; mso-border-alt:16px solid #243b53; text-align:center;">
             Review this product
         </a>
     </td>

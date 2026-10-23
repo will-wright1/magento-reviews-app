@@ -97,17 +97,16 @@ class SatisfactionReminderEmail
             $qty = (int) $row['qty_ordered'];
             $rowsHtml .= <<<HTML
 <tr>
-    <td style="padding:10px 12px; border-bottom:1px solid #f0f0f0; font-family:Arial,Helvetica,sans-serif; font-size:14px; color:#333333;">{$name}</td>
-    <td style="padding:10px 12px; border-bottom:1px solid #f0f0f0; font-family:Arial,Helvetica,sans-serif; font-size:14px; color:#888888; text-align:right; white-space:nowrap;">Qty: {$qty}</td>
+    <td class="order-item order-name" style="padding:12px 0; border-bottom:1px solid #e4e8e7; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:22px; color:#344250; overflow-wrap:anywhere;">{$name}</td>
+    <td class="order-item order-quantity" style="padding:12px 0 12px 16px; border-bottom:1px solid #e4e8e7; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:22px; color:#63717d; text-align:right; white-space:nowrap;">Qty: {$qty}</td>
 </tr>
 HTML;
         }
 
         return <<<HTML
 <tr>
-    <td style="padding:8px 32px 16px 32px;">
-        <div style="font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#888888; margin-bottom:6px;">Your order:</div>
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #f0f0f0; border-radius:4px;">
+    <td style="padding:0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
             {$rowsHtml}
         </table>
     </td>

@@ -113,8 +113,8 @@ HTML;
 
         return <<<HTML
 <tr>
-    <td align="center" style="padding:8px 0;">
-        <a href="{$urlH}" target="_blank" rel="noopener" style="display:inline-block; background-color:__ACCENT_COLOR__; color:#ffffff; font-family:Arial,Helvetica,sans-serif; font-size:17px; font-weight:700; text-decoration:none; padding:16px 32px; border-radius:6px; min-width:260px; text-align:center;">
+    <td style="padding:0 0 12px;">
+        <a class="email-button" href="{$urlH}" target="_blank" rel="noopener" style="display:block; background-color:#243b53; border:1px solid #243b53; color:#ffffff; font-family:Arial,Helvetica,sans-serif; font-size:16px; line-height:22px; font-weight:700; text-decoration:none; padding:16px 20px; border-radius:4px; mso-padding-alt:0; mso-border-alt:16px solid #243b53; text-align:center;">
             {$labelH}
         </a>
     </td>

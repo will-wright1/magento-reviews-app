@@ -51,6 +51,11 @@ assert '->suppress(' not in (root/'Controller/Unsubscribe/Index.php').read_text(
 for p in (root/'view/frontend/email').glob('*.html'):
     source=p.read_text()
     if re.search(r'vanimal|4x4at|reviewautomation\.com|prize draw|van racking',source,re.I): errors.append(f'{p}: client-specific copy')
+from check_emails import check as check_emails
+try:
+    print(check_emails())
+except (AssertionError, subprocess.CalledProcessError, ValueError) as error:
+    errors.append(str(error))
 if errors:
     print('\n'.join(errors));sys.exit(1)
 print(f'Package checks passed: {len(files)} files, PHP syntax, XML, namespaces, templates, schema and safe defaults.')

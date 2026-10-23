@@ -114,7 +114,7 @@ $templateFactory = new class extends Magento\Email\Model\TemplateFactory {
 };
 $logger = new class implements Psr\Log\LoggerInterface {public function warning($message,array $context=[]) {}};
 $loader=new ReviewAutomation\Reviews\Model\Email\TemplateLoader($templateFactory,$logger,$config);
-$replacements=['__FIRSTNAME__'=>'A &amp; B','__ORDER_INCREMENT_ID__'=>'100001','__ORDER_ITEMS_HTML__'=>'<p>Product</p>','__HAPPY_URL__'=>'https://example.com/happy','__UNHAPPY_URL__'=>'https://example.com/feedback','__PUBLIC_REVIEW_URL__'=>'https://example.com/review','__UNSUBSCRIBE_URL__'=>'https://example.com/unsubscribe','__PLATFORM_BUTTONS_HTML__'=>'<a style="color:__ACCENT_COLOR__">Review</a>','__PRODUCT_REVIEW_BUTTONS_HTML__'=>'<p>Products</p>'];
+$replacements=['__FIRSTNAME__'=>'A &amp; B','__ORDER_INCREMENT_ID__'=>'100001','__ORDER_ITEMS_HTML__'=>'<tr><td>Product</td></tr>','__HAPPY_URL__'=>'https://example.com/happy','__UNHAPPY_URL__'=>'https://example.com/feedback','__PUBLIC_REVIEW_URL__'=>'https://example.com/review','__UNSUBSCRIBE_URL__'=>'https://example.com/unsubscribe','__PLATFORM_BUTTONS_HTML__'=>'<tr><td><a style="color:__ACCENT_COLOR__">Review</a></td></tr>','__PRODUCT_REVIEW_BUTTONS_HTML__'=>'<tr><td>Products</td></tr>'];
 foreach (['check','review','product'] as $id) {
     $rendered=$loader->render($id,$replacements,2); eq(false,(bool)preg_match('/__[A-Z_]+__/',$rendered['html']),'no unresolved placeholders in '.$id); eq(true,str_contains($rendered['html'],'Example Store'),'store branding rendered in '.$id);
 }

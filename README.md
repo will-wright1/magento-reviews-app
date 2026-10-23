@@ -80,6 +80,10 @@ Open **Marketing → Review Automation** for Review Queue, Customer Feedback, Su
 
 Emails can be copied through **Marketing → Email Templates** and selected in configuration. They use `__PLACEHOLDER__` substitutions; preserve required placeholders when editing. Common placeholders are `__BRAND_NAME__`, `__BRAND_HEADER_HTML__`, `__ACCENT_COLOR__` and `__FIRSTNAME__`. Each default file shows its message-specific placeholders. Custom `{{var ...}}` directives inside these templates are not supported; only the internal passthrough template uses Magento directives. Missing or unresolved templates fail rather than sending broken content.
 
+The order, platform-button and product-button placeholders (`__ORDER_ITEMS_HTML__`, `__PLATFORM_BUTTONS_HTML__`, `__PRODUCT_REVIEW_BUTTONS_HTML__`) contain table rows. Put each inside its own presentation table and `<tbody>`, as the default templates do; inserting rows directly into a `<td>` can move content outside the email card. Updated package defaults do not overwrite copies saved in Marketing → Email Templates. Select the default again or update the saved copy to pick up layout fixes.
+
+Default customer emails include a responsive layout, a light logo area and dark-mode styles for clients that support them. Check a test email in your customers’ mail clients before enabling a campaign.
+
 Email GET links do not record satisfaction or unsubscribe customers. Those actions require a form POST and form key. Public-platform redirects record a visit, which may include automated scanner visits; this is **not proof of a published review**. There is no Google or Trustpilot review-import API integration.
 
 ## Existing installations
@@ -94,7 +98,7 @@ python3 tools/check.py
 php tests/run.php
 ```
 
-These checks run without Magento dependencies and cover package wiring and isolated logic. GitHub Actions runs them on PHP 8.1–8.5. They do not substitute for Magento schema installation, dependency compilation, browser checks or a real email transport test.
+These checks run without Magento dependencies and cover package wiring, isolated logic and 20 fully rendered email variants using the real row renderers. Email checks verify table structure, link containment, escaping and logo sizing. GitHub Actions runs them on PHP 8.1–8.5. They do not substitute for Magento schema installation, dependency compilation, browser checks or a real email transport test.
 
 Use [Testing](docs/TESTING.md) for the staging acceptance procedure and `tools/magento-smoke.php` for read-only runtime construction checks. This workspace has no installed Magento runtime or database; end-to-end Magento acceptance has not been executed here.
 

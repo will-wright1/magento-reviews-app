@@ -1,8 +1,56 @@
 <!--@subject Would you review your products, __FIRSTNAME__? @-->
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Review your products</title></head>
-<body style="margin:0;background:#f4f4f4;font-family:Arial,sans-serif;color:#222">
-<table role="presentation" width="100%"><tr><td align="center" style="padding:24px 12px">
-<table role="presentation" width="100%" style="max-width:600px;background:#fff"><tr><td style="padding:24px;background:#1a1a1a;color:#fff;font-size:24px;text-align:center">__BRAND_HEADER_HTML__</td></tr>
-<tr><td style="padding:24px;border-top:4px solid __ACCENT_COLOR__"><h1>Review your products</h1><p>Hi __FIRSTNAME__,</p><p>Tell other customers about the products in order #__ORDER_INCREMENT_ID__. All experiences are welcome.</p>__PRODUCT_REVIEW_BUTTONS_HTML__<p>Thank you,<br>__BRAND_NAME__</p></td></tr>
-<tr><td style="padding:24px;border-top:1px solid #eee;font-size:12px"><a href="__UNSUBSCRIBE_URL__">Unsubscribe from review emails</a></td></tr>
-</table></td></tr></table></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
+  <title>How are you finding it?</title>
+  <style>
+    body, table, td, a { -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+    table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }
+    img { border:0; outline:none; text-decoration:none; }
+    a { color:#243b53; }
+    @media only screen and (max-width:620px) {
+      .email-shell { padding:16px 8px !important; }
+      .email-content { padding:28px 22px !important; }
+      .email-footer { padding:22px !important; }
+      .email-title { font-size:27px !important; line-height:34px !important; }
+      .email-button { display:block !important; padding:15px 12px !important; }
+    }
+    @media (prefers-color-scheme:dark) {
+      body, .email-background { background-color:#202326 !important; }
+      .email-card, .email-content { background-color:#2b3035 !important; color:#f1f3f5 !important; }
+      .email-title, .email-copy, .order-name { color:#f1f3f5 !important; }
+      .email-muted, .order-quantity { color:#c2c9cf !important; }
+      .email-link { color:#bcd6ee !important; }
+      .email-footer { background-color:#252a2e !important; color:#c2c9cf !important; border-color:#454c52 !important; }
+      .order-item { border-color:#454c52 !important; }
+      .email-button { background-color:#e5edf4 !important; color:#172b3a !important; border-color:#e5edf4 !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#f3f4f3;font-family:Arial,Helvetica,sans-serif;color:#344250;">
+  <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">Share a few thoughts about your purchase.</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="email-background" style="background-color:#f3f4f3;"><tbody>
+    <tr><td class="email-shell" align="center" style="padding:36px 12px;">
+      <!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="email-card" style="max-width:600px;background-color:#ffffff;"><tbody>
+        <tr><td align="center" bgcolor="#ffffff" style="padding:30px 24px;background-color:#ffffff;color:#243b53;font-size:24px;line-height:30px;font-weight:bold;">__BRAND_HEADER_HTML__</td></tr>
+        <tr><td class="email-content" style="padding:36px 36px 32px;border-top:3px solid __ACCENT_COLOR__;">
+          <h1 class="email-title" style="margin:0 0 24px;color:#1d2e3e;font-size:30px;line-height:38px;font-weight:bold;">How are you finding it?</h1>
+          <p class="email-copy" style="margin:0 0 20px;color:#344250;font-size:16px;line-height:26px;">Hi __FIRSTNAME__,</p>
+          <p class="email-copy" style="margin:0 0 20px;color:#344250;font-size:16px;line-height:26px;">Now you’ve had some time with your purchase, we’d love to hear what you think. Your honest product review helps other customers choose with confidence.</p><p class="email-muted" style="margin:0 0 8px;color:#63717d;font-size:13px;line-height:20px;">ORDER #__ORDER_INCREMENT_ID__</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 24px;"><tbody>__PRODUCT_REVIEW_BUTTONS_HTML__</tbody></table>
+          <p class="email-copy" style="margin:0;color:#344250;font-size:16px;line-height:26px;">Thank you,<br>The __BRAND_NAME__ team</p>
+        </td></tr>
+        <tr><td class="email-footer" style="padding:24px 36px;background-color:#f8f9f8;border-top:1px solid #e4e8e7;color:#63717d;font-size:12px;line-height:20px;">
+          <p style="margin:0 0 8px;">You’re receiving this because you placed an order with __BRAND_NAME__.</p>
+          <a class="email-link" href="__UNSUBSCRIBE_URL__" style="color:#536677;text-decoration:underline;">Unsubscribe from review emails</a>
+        </td></tr>
+      </tbody></table>
+      <!--[if mso]></td></tr></table><![endif]-->
+    </td></tr>
+  </tbody></table>
+</body>
+</html>

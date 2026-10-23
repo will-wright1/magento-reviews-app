@@ -79,7 +79,7 @@ class TemplateLoader
         $replacements += [
             '__BRAND_NAME__' => $name,
             '__ACCENT_COLOR__' => $this->config->getAccentColor($storeId),
-            '__BRAND_HEADER_HTML__' => $logo !== '' ? '<img src="' . $escape($logo) . '" alt="' . $name . '" style="max-width:220px;max-height:80px;">' : $name,
+            '__BRAND_HEADER_HTML__' => $logo !== '' ? '<img src="' . $escape($logo) . '" alt="' . $name . '" width="220" style="display:block;width:220px;max-width:100%;height:auto;margin:0 auto;">' : $name,
         ];
 
         // Substitute custom placeholders in both body and subject.
