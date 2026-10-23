@@ -5,7 +5,7 @@ namespace Magento\Framework\App\Config {
     interface ScopeConfigInterface { public function getValue($path, $scope = null, $store = null); public function isSetFlag($path, $scope = null, $store = null); }
 }
 namespace Magento\Sales\Model { class Order { public const STATE_COMPLETE = 'complete'; } }
-namespace Magento\Store\Model { interface ScopeInterface { public const SCOPE_STORE = 'store'; } }
+namespace Magento\Store\Model { interface StoreManagerInterface { public function getStore($store = null); } interface ScopeInterface { public const SCOPE_STORE = 'store'; } }
 namespace Magento\Framework\Data { interface OptionSourceInterface { public function toOptionArray(); } }
 namespace Magento\Framework\Model {
     class AbstractModel {

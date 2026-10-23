@@ -1,30 +1,12 @@
-<?php
-/**
- * Token-expired / invalid-link landing page.
- *
- * @var \Magento\Framework\View\Element\Template $block
- */
-?>
-<?php if ($block->getData('branding')->getLogoUrl()): ?>
-    <p style="text-align:center"><img style="max-width:220px;max-height:80px" src="<?= $block->escapeUrl($block->getData('branding')->getLogoUrl()) ?>" alt="<?= $block->escapeHtmlAttr($block->getData('branding')->getName()) ?>"></p>
-<?php endif; ?>
-<div class="reviewautomation-review-expired" style="max-width:640px; margin:40px auto; text-align:center; font-family:Arial,Helvetica,sans-serif;">
-    <div style="background-color:#1a1a1a; padding:32px; border-radius:6px 6px 0 0;">
-        <div style="font-size:28px; font-weight:700; letter-spacing:2px; color:#ffffff;"><?= $block->escapeHtml($block->getData('branding')->getName()) ?></div>
-        <div style="width:60px; height:3px; background-color:<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>; margin:10px auto 0;"></div>
+<?php /** @var \Magento\Framework\View\Element\Template $block */ ?>
+<section class="ra-review" aria-labelledby="ra-title" style="--review-accent:<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>">
+    <div class="ra-card">
+        <p class="ra-eyebrow"><?= $block->escapeHtml(__('Your feedback')) ?></p>
+        <div class="ra-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h1 id="ra-title"><?= $block->escapeHtml(__('This link is no longer available')) ?></h1>
+        <p><?= $block->escapeHtml(__('It may have expired, or the address may be incomplete. Please use the most recent review email we sent you.')) ?></p>
+        <hr class="ra-divider">
+        <p class="ra-muted"><?= $block->escapeHtml(__('Need a hand with your order? Our team is here to help.')) ?></p>
+        <div class="ra-actions"><a class="ra-button" href="<?= $block->escapeUrl($block->getUrl('contact')) ?>"><?= $block->escapeHtml(__('Contact the team')) ?></a><a class="ra-link" href="<?= $block->escapeUrl($block->getBaseUrl()) ?>"><?= $block->escapeHtml(__('Continue shopping')) ?></a></div>
     </div>
-
-    <div style="background-color:#ffffff; padding:40px 32px 32px; border:1px solid #e0e0e0; border-top:none; border-radius:0 0 6px 6px;">
-        <h1 style="font-size:24px; color:#1a1a1a; margin:0 0 16px;">This link has expired</h1>
-        <p style="font-size:16px; color:#555555; line-height:1.6; margin:0 0 24px;">
-            Sorry, this link is no longer valid. Review links expire after a while for your security.
-        </p>
-        <p style="font-size:14px; color:#888888; margin:0 0 24px;">
-            If you have any questions about your order, please get in touch with our team.
-        </p>
-        <a href="<?= $block->escapeUrl($block->getBaseUrl()) ?>"
-           style="display:inline-block; background-color:<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>; color:#ffffff; font-size:16px; font-weight:700; text-decoration:none; padding:14px 32px; border-radius:6px;">
-            Back to Review Automation
-        </a>
-    </div>
-</div>
+</section>

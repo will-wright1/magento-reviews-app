@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head><css src="ReviewAutomation_Reviews::css/reviews.css"/><meta name="robots" content="NOINDEX,NOFOLLOW"/></head>
+    <body><referenceBlock name="page.main.title" remove="true"/></body>
+</page>

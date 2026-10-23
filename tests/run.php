@@ -107,7 +107,7 @@ eq(false,$timestamp->validateToken(base64_encode('not-a-time')),'tampered feedba
 $templateFactory = new class extends Magento\Email\Model\TemplateFactory {
     public function create(array $data = []) { return new class {
         private string $body=''; public function setDesignConfig($data) {return $this;}
-        public function loadDefault($id) { $map=['check'=>'satisfaction_check','review'=>'review_request','product'=>'product_review_request']; $this->body=file_get_contents(dirname(__DIR__).'/view/frontend/email/'.$map[$id].'.html'); return $this; }
+        public function loadDefault($id) { $map=['reviewautomation_review_satisfaction_check'=>'satisfaction_check','check'=>'satisfaction_check','review'=>'review_request','product'=>'product_review_request']; $this->body=file_get_contents(dirname(__DIR__).'/view/frontend/email/'.$map[$id].'.html'); return $this; }
         public function getTemplateText() {return $this->body;}
         public function getTemplateSubject() {preg_match('/<!--@subject (.*?) @-->/', $this->body,$m);return $m[1]??'';}
     }; }
@@ -164,4 +164,42 @@ $q->setData('created_at',gmdate('Y-m-d H:i:s')); $anchors->anchor=new DateTimeIm
 eq('Order outside the age window.',$realGuard->reason($q,SendResult::TYPE_EMAIL1),'organic old order blocked');
 $q->setData('age_exempt',1); eq(null,$realGuard->reason($q,SendResult::TYPE_EMAIL1),'booster may use historical fulfilment');
 $suppression->blocked=true; eq('Customer suppressed.',$realGuard->reason($q,SendResult::TYPE_EMAIL1),'booster cannot bypass suppression');
+
+// Render the real satisfaction sender into a capture transport: preview links must never use customer tokens.
+$capture = new class extends ReviewAutomation\Reviews\Model\Email\MessageBuilder {
+    public array $message = [];
+    public function __construct() {}
+    public function send(string $subject, string $htmlBody, string $fromEmail, string $fromName, string $toEmail, string $toName, int $storeId): bool {
+        $this->message = [$subject, $htmlBody]; return true;
+    }
+};
+$stores = new class implements Magento\Store\Model\StoreManagerInterface {
+    public function getStore($store = null) { return new class { public function getBaseUrl() { return 'https://example.com/'; } }; }
+};
+$emptyItems = new class extends Magento\Framework\App\ResourceConnection {
+    public function getTableName($name) { return $name; }
+    public function getConnection() { return new class {
+        public function select() { return $this; } public function from($a,$b) { return $this; }
+        public function where($a,$b=null) { return $this; } public function fetchAll($q) { return []; }
+    }; }
+};
+$sender = new SatisfactionEmail($capture,$loader,$config,$stores,$emptyItems,$logger);
+$testQueue = new Queue(['store_id'=>2,'order_id'=>0,'order_increment_id'=>'TEST-1','customer_firstname'=>'  Alex  ','customer_email'=>'admin@example.com','token'=>str_repeat('a',64),'is_preview'=>true]);
+eq(true,$sender->send($testQueue),'test email renders through real sender into capture');
+eq(true,str_starts_with($capture->message[0],'[TEST] '),'test subject clearly labelled');
+eq(true,str_contains($capture->message[1],'Hi Alex,'),'customer name whitespace trimmed');
+eq(false,str_contains($capture->message[1],'/token/'),'test email contains no customer token links');
+foreach (ReviewAutomation\Reviews\Model\TestEmailPreview::getUrls('https://example.com/') as $type=>$url) {
+    eq(true,str_contains($capture->message[1],$url),'test '.$type.' link uses isolated preview route');
+}
+eq(true,str_contains($capture->message[1],'sample-only previews'),'test email explains preview behavior');
+$testQueue->setData('is_preview',false);
+eq(true,$sender->send($testQueue),'customer email still renders');
+eq(false,str_starts_with($capture->message[0],'[TEST] '),'customer subject has no test label');
+eq(true,str_contains($capture->message[1],'/token/'.str_repeat('a',64)),'customer links retain real token route');
+eq(false,str_contains($capture->message[1],'/preview/'),'customer email never uses preview route');
+eq(false,ReviewAutomation\Reviews\Model\TestEmailPreview::isValidStep('../../submit'),'unknown preview step rejected');
+foreach (ReviewAutomation\Reviews\Model\TestEmailPreview::STEPS as $step) {
+    eq(true,ReviewAutomation\Reviews\Model\TestEmailPreview::isValidStep($step),'preview step allowed: '.$step);
+}
 echo "\n$tests checks passed.\n";

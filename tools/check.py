@@ -52,8 +52,10 @@ for p in (root/'view/frontend/email').glob('*.html'):
     source=p.read_text()
     if re.search(r'vanimal|4x4at|reviewautomation\.com|prize draw|van racking',source,re.I): errors.append(f'{p}: client-specific copy')
 from check_emails import check as check_emails
+from check_pages import check as check_pages
 try:
     print(check_emails())
+    print(check_pages())
 except (AssertionError, subprocess.CalledProcessError, ValueError) as error:
     errors.append(str(error))
 if errors:

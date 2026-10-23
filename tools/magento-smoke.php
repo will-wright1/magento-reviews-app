@@ -13,6 +13,7 @@ foreach ([
     \ReviewAutomation\Reviews\Cron\PopulateQueue::class,
     \ReviewAutomation\Reviews\Cron\SendEmails::class,
     \ReviewAutomation\Reviews\Cron\FeedBoosterBatches::class,
+    \ReviewAutomation\Reviews\Controller\Preview\Index::class,
     \ReviewAutomation\Reviews\Controller\Response\Click::class,
     \ReviewAutomation\Reviews\Controller\Response\Submit::class,
     \ReviewAutomation\Reviews\Controller\Response\Feedbackpost::class,

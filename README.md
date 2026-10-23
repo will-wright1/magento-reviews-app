@@ -24,7 +24,7 @@ Extracted from the custom Vanimal and 4x4AT implementations into one configurabl
 | Branding | Store-specific business name, optional HTTPS logo, accent colour and editable email templates |
 | Operations | Store allowlist, daytime sending window, monthly campaign limit and admin test email |
 
-Sending is **disabled by default**. An empty allowed-store list also blocks sending. The test-email button sends only to the logged-in administrator and does not change the customer queue.
+Sending is **disabled by default**. An empty allowed-store list also blocks sending. The test-email button sends only to the logged-in administrator and does not change the customer queue. Its links demonstrate the landing pages without recording feedback or changing email preferences.
 
 ## Installation
 
@@ -55,7 +55,7 @@ Open **Stores → Configuration → Review Automation → Review Automation**.
 
 1. At Default Config scope, choose the allowed storefronts under Order Filters. Keep marketplace-only stores excluded.
 2. Set sender and notification addresses, company review URLs and branding. Empty sender values inherit Magento's general contact identity; business name falls back to the store or sender name.
-3. Send a test email to the logged-in administrator. Its random token is intentionally not a live customer token.
+3. Send a test email to the logged-in administrator. It is labelled [TEST]; its links open a separate, sample-only preview journey. No feedback, public review or unsubscribe preference is saved. Preview links do not expire because they contain no customer token or personal data. Older test emails generated before this preview feature still open the unavailable-link page.
 4. Check the queue and campaign settings, then enable sending at Default Config scope and each relevant store scope. Default scope is the global cron switch; stores can opt out individually.
 
 The store allowlist is controlled at Default Config scope. Timing, branding, addresses, platform selection, enablement and suppression settings can vary by store. Unsubscribes and the calendar-month campaign allowance apply to a customer email across store views. The monthly limit counts **order campaigns**, not every email in a campaign. A historical batch's daily allowance controls queue entries, not total outbound messages.
@@ -98,7 +98,7 @@ python3 tools/check.py
 php tests/run.php
 ```
 
-These checks run without Magento dependencies and cover package wiring, isolated logic and 20 fully rendered email variants using the real row renderers. Email checks verify table structure, link containment, escaping and logo sizing. GitHub Actions runs them on PHP 8.1–8.5. They do not substitute for Magento schema installation, dependency compilation, browser checks or a real email transport test.
+These checks run without Magento dependencies and cover package wiring, isolated logic and 20 fully rendered email variants using the real row renderers. Email checks verify table structure, link containment, escaping and logo sizing. Landing checks render 14 page states and verify preview isolation, a single heading and retained POST/CSRF controls. GitHub Actions runs them on PHP 8.1–8.5. They do not substitute for Magento schema installation, dependency compilation, browser checks or a real email transport test.
 
 Use [Testing](docs/TESTING.md) for the staging acceptance procedure and `tools/magento-smoke.php` for read-only runtime construction checks. This workspace has no installed Magento runtime or database; end-to-end Magento acceptance has not been executed here.
 

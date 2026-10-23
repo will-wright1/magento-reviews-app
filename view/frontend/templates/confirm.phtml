@@ -1,15 +1,16 @@
 <?php /** @var \Magento\Framework\View\Element\Template $block */ ?>
-<?php if ($block->getData('branding')->getLogoUrl()): ?>
-    <p style="text-align:center"><img style="max-width:220px;max-height:80px" src="<?= $block->escapeUrl($block->getData('branding')->getLogoUrl()) ?>" alt="<?= $block->escapeHtmlAttr($block->getData('branding')->getName()) ?>"></p>
-<?php endif; ?>
-<div style="max-width:640px;margin:40px auto">
-    <h1><?= $block->escapeHtml($block->getData('branding')->getName()) ?></h1>
-    <p><?= $block->escapeHtml(__('Confirm to share your feedback with our team.')) ?></p>
-    <form method="post" action="<?= $block->escapeUrl($block->getUrl('reviewautomation_reviews/response/submit')) ?>">
-        <?= $block->getBlockHtml('formkey') ?>
-        <input type="hidden" name="token" value="<?= $block->escapeHtmlAttr((string) $block->getRequest()->getParam('token')) ?>">
-        <input type="hidden" name="sentiment" value="<?= $block->escapeHtmlAttr((string) $block->getRequest()->getParam('sentiment')) ?>">
-        <button type="submit" class="action primary"><?= $block->escapeHtml(__('Continue')) ?></button>
-    </form>
-    <p><a href="<?= $block->escapeUrl($block->getUrl('reviewautomation_reviews/response/thankyou', ['token' => (string) $block->getRequest()->getParam('token')])) ?>"><?= $block->escapeHtml(__('Leave a public review')) ?></a></p>
-</div>
+<section class="ra-review" aria-labelledby="ra-title" style="--review-accent:<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>">
+    <div class="ra-card">
+        <p class="ra-eyebrow"><?= $block->escapeHtml(__('Your feedback')) ?></p>
+        <h1 id="ra-title"><?= $block->escapeHtml(__('Share your feedback')) ?></h1>
+        <?php $positive = $block->getRequest()->getParam('sentiment') === 'happy'; ?>
+        <p><?= $block->escapeHtml($positive ? __('Let us know that everything went well. You can also share your experience in a public review.') : __('If something wasn’t right, we’d like to help. Continue to tell our team what happened.')) ?></p>
+        <form method="post" action="<?= $block->escapeUrl($block->getUrl('reviewautomation_reviews/response/submit')) ?>">
+            <?= $block->getBlockHtml('formkey') ?>
+            <input type="hidden" name="token" value="<?= $block->escapeHtmlAttr((string) $block->getRequest()->getParam('token')) ?>">
+            <input type="hidden" name="sentiment" value="<?= $block->escapeHtmlAttr((string) $block->getRequest()->getParam('sentiment')) ?>">
+            <button type="submit" class="ra-button"><?= $block->escapeHtml(__('Continue')) ?></button>
+        </form>
+        <hr class="ra-divider"><p class="ra-small"><a class="ra-link" href="<?= $block->escapeUrl($block->getUrl('reviewautomation_reviews/response/thankyou', ['token' => (string) $block->getRequest()->getParam('token')])) ?>"><?= $block->escapeHtml(__('Leave a public review')) ?></a></p>
+    </div>
+</section>

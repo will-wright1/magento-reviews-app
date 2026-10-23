@@ -1,13 +1,14 @@
 <?php /** @var \Magento\Framework\View\Element\Template $block */ ?>
-<?php if ($block->getData('branding')->getLogoUrl()): ?>
-    <p style="text-align:center"><img style="max-width:220px;max-height:80px" src="<?= $block->escapeUrl($block->getData('branding')->getLogoUrl()) ?>" alt="<?= $block->escapeHtmlAttr($block->getData('branding')->getName()) ?>"></p>
-<?php endif; ?>
-<div style="max-width:640px;margin:40px auto">
-    <h1><?= $block->escapeHtml($block->getData('branding')->getName()) ?></h1>
-    <p><?= $block->escapeHtml(__('Confirm below to stop receiving review emails. This preference applies across our store views.')) ?></p>
-    <form method="post" action="<?= $block->escapeUrl($block->getUrl('reviewautomation_reviews/unsubscribe/save')) ?>">
-        <?= $block->getBlockHtml('formkey') ?>
-        <input type="hidden" name="token" value="<?= $block->escapeHtmlAttr((string) $block->getRequest()->getParam('token')) ?>">
-        <button type="submit" class="action primary"><?= $block->escapeHtml(__('Unsubscribe')) ?></button>
-    </form>
-</div>
+<section class="ra-review" aria-labelledby="ra-title" style="--review-accent:<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>">
+    <div class="ra-card">
+        <p class="ra-eyebrow"><?= $block->escapeHtml(__('Your feedback')) ?></p>
+        <h1 id="ra-title"><?= $block->escapeHtml(__('Review email preferences')) ?></h1>
+        <p><?= $block->escapeHtml(__('If you’d prefer not to receive review requests, you can unsubscribe below. This applies across our store views.')) ?></p>
+        <form method="post" action="<?= $block->escapeUrl($block->getUrl('reviewautomation_reviews/unsubscribe/save')) ?>">
+            <?= $block->getBlockHtml('formkey') ?>
+            <input type="hidden" name="token" value="<?= $block->escapeHtmlAttr((string) $block->getRequest()->getParam('token')) ?>">
+            <button type="submit" class="ra-button"><?= $block->escapeHtml(__('Unsubscribe from review emails')) ?></button>
+        </form>
+        <hr class="ra-divider"><p class="ra-small"><a class="ra-link" href="<?= $block->escapeUrl($block->getBaseUrl()) ?>"><?= $block->escapeHtml(__('Continue shopping')) ?></a></p>
+    </div>
+</section>

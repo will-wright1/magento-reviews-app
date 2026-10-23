@@ -42,7 +42,7 @@ class SatisfactionEmail
     public function send(Queue $queue): bool
     {
         $storeId = (int) $queue->getStoreId();
-        $firstname = (string) ($queue->getCustomerFirstname() ?: 'there');
+        $firstname = trim((string) $queue->getCustomerFirstname()) ?: 'there';
         $incrementId = (string) $queue->getOrderIncrementId();
         $token = (string) $queue->getToken();
         $email = (string) $queue->getCustomerEmail();
@@ -55,6 +55,15 @@ class SatisfactionEmail
             $unhappyUrl = $baseUrl . 'reviewautomation_reviews/response/click/token/' . $token . '/sentiment/unhappy';
             $unsubscribeUrl = $baseUrl . 'reviewautomation_reviews/unsubscribe/index/token/' . $token;
 
+            $publicReviewUrl = $baseUrl . 'reviewautomation_reviews/response/thankyou/token/' . $token;
+            if ($queue->getData('is_preview')) {
+                $preview = \ReviewAutomation\Reviews\Model\TestEmailPreview::getUrls($baseUrl);
+                $happyUrl = $preview['happy'];
+                $unhappyUrl = $preview['unhappy'];
+                $publicReviewUrl = $preview['review'];
+                $unsubscribeUrl = $preview['unsubscribe'];
+            }
+
             $itemsHtml = $this->renderOrderItemsHtml((int) $queue->getOrderId());
 
             $templateId = $this->config->getSatisfactionEmailTemplate($storeId);
@@ -64,9 +73,16 @@ class SatisfactionEmail
                 '__HAPPY_URL__'          => $this->esc($happyUrl),
                 '__UNHAPPY_URL__'        => $this->esc($unhappyUrl),
                 '__ORDER_ITEMS_HTML__'   => $itemsHtml,
-                '__PUBLIC_REVIEW_URL__' => $this->esc($baseUrl . 'reviewautomation_reviews/response/thankyou/token/' . $token),
+                '__PUBLIC_REVIEW_URL__' => $this->esc($publicReviewUrl),
                 '__UNSUBSCRIBE_URL__'    => $this->esc($unsubscribeUrl),
             ], $storeId);
+            if ($queue->getData('is_preview')) {
+                $result['subject'] = '[TEST] ' . $result['subject'];
+                $notice = '<p style="margin:0;padding:14px 20px;background:#fff5d6;color:#483b16;font:14px/22px Arial,sans-serif;text-align:center;">Test email — links open sample-only previews. No feedback or email preferences will be saved.</p>';
+                $count = 0;
+                $result['html'] = (string) preg_replace('/(<body\b[^>]*>)/i', '$1' . $notice, $result['html'], 1, $count);
+                if ($count === 0) { $result['html'] = $notice . $result['html']; }
+            }
         } catch (\Throwable $e) {
             $this->logger->error(sprintf(
                 'ReviewAutomation: SatisfactionEmail send failed for queue_id=%d, store_id=%d — %s',

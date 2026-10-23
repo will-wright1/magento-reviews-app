@@ -171,7 +171,7 @@
                     <comment><![CDATA[
                         Sends a test Email 1 (satisfaction check) to the logged-in admin's email address using the latest eligible order's data.
                         If no eligible order exists, mock data is used and the result is labelled accordingly.
-                        Use this to verify the email pipeline is working without waiting for cron.
+                        Links open sample-only preview pages without saving feedback or changing email preferences. Use this to verify the email pipeline without waiting for cron.
                     ]]></comment>
                 </field>
             </group>

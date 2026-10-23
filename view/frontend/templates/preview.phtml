@@ -1,0 +1,62 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+$step = (string) $block->getRequest()->getParam('step', 'happy');
+$next = static fn(string $step): string => $block->getUrl('reviewautomation_reviews/preview/index', ['step' => $step]);
+?>
+<section class="ra-review" aria-labelledby="ra-title" style="--review-accent:<?= $block->escapeHtmlAttr($block->getData('branding')->getColor()) ?>">
+    <aside class="ra-notice" aria-label="<?= $block->escapeHtmlAttr(__('Test email preview')) ?>">
+        <strong><?= $block->escapeHtml(__('Test email preview')) ?></strong>
+        <?= $block->escapeHtml(__('This is a sample journey. Nothing you enter is sent or saved, and email preferences are unchanged.')) ?>
+    </aside>
+    <div class="ra-card">
+        <p class="ra-eyebrow"><?= $block->escapeHtml(__('Your feedback')) ?></p>
+        <?php if (in_array($step, ['happy', 'unhappy'], true)): ?>
+        <h1 id="ra-title"><?= $block->escapeHtml(__('Share your feedback')) ?></h1>
+        <p><?= $block->escapeHtml($step === 'happy' ? __('Let us know that everything went well. You can also share your experience in a public review.') : __('If something wasn’t right, we’d like to help. Continue to tell our team what happened.')) ?></p>
+        <div class="ra-actions"><a class="ra-button" href="<?= $block->escapeUrl($next($step === 'happy' ? 'review' : 'feedback')) ?>"><?= $block->escapeHtml(__('Continue')) ?></a></div>
+        <?php elseif ($step === 'feedback'): ?>
+        <h1 id="ra-title"><?= $block->escapeHtml(__('Let’s put things right')) ?></h1>
+        <p><?= $block->escapeHtml(__('Please tell us what happened so our team can help.')) ?></p>
+        <!-- Deliberately no name attributes: sample text is never submitted, even in the URL. -->
+        <form method="get" action="<?= $block->escapeUrl($next('feedbackthanks')) ?>">
+            <div class="ra-field">
+                <label for="preview_feedback"><?= $block->escapeHtml(__('Tell us what happened')) ?></label>
+                <textarea id="preview_feedback" rows="5" placeholder="<?= $block->escapeHtmlAttr(__('Try the form using sample text.')) ?>"></textarea>
+            </div>
+            <button type="submit" class="ra-button"><?= $block->escapeHtml(__('Preview feedback confirmation')) ?></button>
+        </form>
+        <?php elseif ($step === 'feedbackthanks'): ?>
+        <div class="ra-icon" aria-hidden="true">✓</div>
+        <h1 id="ra-title"><?= $block->escapeHtml(__('Thank you for letting us know')) ?></h1>
+        <p><?= $block->escapeHtml(__('Customers see confirmation here after their comments reach the team. In this preview, no feedback has been submitted.')) ?></p>
+        <?php elseif ($step === 'unsubscribe'): ?>
+        <h1 id="ra-title"><?= $block->escapeHtml(__('Review email preferences')) ?></h1>
+        <p><?= $block->escapeHtml(__('Customers can use this page to stop receiving review requests. This preview won’t change any email preferences.')) ?></p>
+        <div class="ra-actions"><a class="ra-button" href="<?= $block->escapeUrl($next('preferences')) ?>"><?= $block->escapeHtml(__('Preview unsubscribe confirmation')) ?></a></div>
+        <?php elseif ($step === 'preferences'): ?>
+        <div class="ra-icon" aria-hidden="true">✓</div>
+        <h1 id="ra-title"><?= $block->escapeHtml(__('Preview complete')) ?></h1>
+        <p><?= $block->escapeHtml(__('A customer would see confirmation that they have unsubscribed. No email preferences were changed in this preview.')) ?></p>
+        <?php elseif ($step === 'review'): ?>
+        <h1 id="ra-title"><?= $block->escapeHtml(__('Share your experience')) ?></h1>
+        <p><?= $block->escapeHtml(__('Your honest review helps other customers choose with confidence. We welcome every point of view.')) ?></p>
+        <div class="ra-actions">
+            <?php foreach ($block->getData('branding')->getPreviewPlatformLabels() as $label): ?>
+            <a class="ra-button" href="<?= $block->escapeUrl($next('complete')) ?>"><?= $block->escapeHtml(__($label)) ?></a>
+            <?php endforeach; ?>
+        </div>
+        <p class="ra-small" style="margin-top:20px"><?= $block->escapeHtml(__('These preview buttons show the next step without opening a public review site.')) ?></p>
+        <?php else: ?>
+        <div class="ra-icon" aria-hidden="true">↗</div>
+        <h1 id="ra-title"><?= $block->escapeHtml(__('Ready to share a review')) ?></h1>
+        <p><?= $block->escapeHtml(__('In a customer email, this button opens the store’s configured review platform. This preview stays here, so no public review is posted.')) ?></p>
+        <?php endif; ?>
+        <hr class="ra-divider">
+        <div class="ra-actions">
+            <a class="ra-link" href="<?= $block->escapeUrl($next('happy')) ?>"><?= $block->escapeHtml(__('Preview positive feedback')) ?></a>
+            <a class="ra-link" href="<?= $block->escapeUrl($next('unhappy')) ?>"><?= $block->escapeHtml(__('Preview a problem')) ?></a>
+            <a class="ra-link" href="<?= $block->escapeUrl($next('review')) ?>"><?= $block->escapeHtml(__('Preview a public review')) ?></a>
+            <a class="ra-link" href="<?= $block->escapeUrl($block->getBaseUrl()) ?>"><?= $block->escapeHtml(__('Continue shopping')) ?></a>
+        </div>
+    </div>
+</section>

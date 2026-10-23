@@ -1,0 +1,28 @@
+.ra-review{--review-accent:#243b53;max-width:640px;box-sizing:border-box;margin:56px auto 72px;color:#283745;font-family:inherit}
+.ra-review *{box-sizing:border-box}
+.ra-review .ra-card{padding:40px;border:1px solid #e1e5e7;border-top:3px solid var(--review-accent);border-radius:8px;background:#fff}
+.ra-review .ra-eyebrow{margin:0 0 16px;font-size:12px;line-height:18px;letter-spacing:1.8px;font-weight:600;text-transform:uppercase;color:#657481}
+.ra-review h1{margin:0 0 18px;font-size:32px;line-height:1.25;font-weight:600;letter-spacing:-.5px;color:#1d2e3e}
+.ra-review p{margin:0 0 20px;font-size:16px;line-height:1.7}
+.ra-review .ra-muted,.ra-review .ra-small{color:#657481}
+.ra-review .ra-small{font-size:13px;line-height:1.6}
+.ra-review .ra-divider{margin:28px 0;border:0;border-top:1px solid #e1e5e7}
+.ra-review .ra-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px 20px;margin:28px 0 0}
+.ra-review .ra-button{display:inline-flex;justify-content:center;align-items:center;min-height:48px;padding:13px 22px;border:1px solid #243b53;border-radius:4px;background:#243b53;color:#fff;text-decoration:none;font-family:inherit;font-size:15px;line-height:22px;font-weight:600;cursor:pointer;text-align:center;white-space:normal}
+.ra-review .ra-button:hover{background:#172b3e;border-color:#172b3e;color:#fff;text-decoration:none}
+.ra-review a.ra-link{color:#344e65;text-decoration:underline;text-underline-offset:3px;font-size:15px}
+.ra-review a:focus-visible,.ra-review button:focus-visible,.ra-review input:focus-visible,.ra-review textarea:focus-visible{outline:3px solid #627f99;outline-offset:4px}
+.ra-review .ra-notice{margin:0 0 20px;padding:14px 18px;border:1px solid #e8d9a6;border-radius:6px;background:#fff8e5;color:#594a22;font-size:14px;line-height:1.6}
+.ra-review .ra-notice strong{display:block;margin-bottom:3px}
+.ra-review .ra-icon{display:flex;align-items:center;justify-content:center;width:48px;height:48px;margin:0 0 24px;border-radius:50%;background:#f0f3f4;color:#344e65;font-size:25px;line-height:1}
+.ra-review form{margin-top:28px}
+.ra-review label,.ra-review legend{display:block;margin-bottom:8px;color:#344250;font-size:14px;line-height:22px;font-weight:600}
+.ra-review fieldset{min-width:0;margin:0 0 24px;padding:0;border:0}
+.ra-review .ra-ratings{display:flex;flex-wrap:wrap;gap:8px}
+.ra-review .ra-ratings label{display:flex;align-items:center;gap:5px;margin:0;padding:10px 12px;border:1px solid #d6dfe3;border-radius:4px;cursor:pointer;font-size:14px}
+.ra-review .ra-ratings input{margin:0;accent-color:#243b53}
+.ra-review textarea{display:block;width:100%;min-height:144px;padding:14px;border:1px solid #adbcc7;border-radius:4px;background:#fff;color:#283745;font:inherit;line-height:1.6;resize:vertical}
+.ra-review .ra-field{margin-bottom:24px}
+.ra-review .ra-honeypot{position:absolute;left:-9999px}
+.ra-review .ra-button[disabled]{cursor:default;opacity:.65}
+@media(max-width:640px){.ra-review{margin:24px auto 40px}.ra-review .ra-card{padding:28px 22px}.ra-review h1{font-size:27px}.ra-review .ra-actions{align-items:stretch;flex-direction:column;gap:18px}.ra-review .ra-button{width:100%}.ra-review .ra-actions .ra-link{text-align:center}.ra-review .ra-ratings label{padding:8px 10px}}

@@ -54,7 +54,7 @@ class SendTestEmail extends Action implements \Magento\Framework\App\Action\Http
             }
 
             $adminEmail     = (string) $adminUser->getEmail();
-            $adminFirstname = (string) ($adminUser->getFirstname() ?: 'Admin');
+            $adminFirstname = trim((string) $adminUser->getFirstname()) ?: 'Admin';
             if ($adminEmail === '') {
                 return $result->setData([
                     'success' => false,
@@ -83,12 +83,14 @@ class SendTestEmail extends Action implements \Magento\Framework\App\Action\Http
                     'order_id'           => (int) $eligibleOrder['entity_id'],
                     'order_increment_id' => (string) $eligibleOrder['increment_id'],
                     'customer_email'     => $adminEmail,             // ← override to admin (NOT real customer)
-                    'customer_firstname' => (string) ($eligibleOrder['customer_firstname'] ?: $adminFirstname),
+                    'customer_firstname' => $adminFirstname,
                     'store_id'           => (int) $eligibleOrder['store_id'],
                     'token'              => $this->generateMockToken(),
                     'status'             => Queue::STATUS_PENDING,
                 ]);
             }
+
+            $queue->setData('is_preview', true);
 
             $sendResult = $this->sendDispatcher->dispatch($queue, false);  // persist=false: no DB write
 
@@ -105,7 +107,7 @@ class SendTestEmail extends Action implements \Magento\Framework\App\Action\Http
                     );
                 return $result->setData([
                     'success'      => true,
-                    'message'      => $msg,
+                    'message'      => $msg . ' Links open sample-only preview pages; no customer feedback or email preferences are changed.',
                     'usedMockData' => $usedMockData,
                 ]);
             }
@@ -124,9 +126,8 @@ class SendTestEmail extends Action implements \Magento\Framework\App\Action\Http
     }
 
     /**
-     * Random hex token (matches the production tokenisation pattern). The
-     * resulting click URLs in the test email won't resolve to a real queue
-     * row — clicking lands on /response/expired, which is fine for a test.
+     * Internal random identifier only. Test email links use the separate,
+     * sample-only preview route and never resolve this as a customer token.
      */
     private function generateMockToken(): string
     {
